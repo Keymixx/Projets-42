@@ -6,7 +6,7 @@
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 16:40:22 by carl              #+#    #+#             */
-/*   Updated: 2025/08/19 18:37:13 by carl             ###   ########.fr       */
+/*   Updated: 2025/08/21 17:33:51 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <string.h>
 #include <stddef.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 int ft_toupper (int nb);
 int ft_strlen(char *str);
