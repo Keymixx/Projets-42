@@ -1,35 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/21 19:01:57 by carl              #+#    #+#             */
-/*   Updated: 2025/08/31 17:55:54 by carl             ###   ########.fr       */
+/*   Created: 2025/08/31 17:45:35 by carl              #+#    #+#             */
+/*   Updated: 2025/08/31 18:02:04 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void *ft_memcpy (void *dest, void *src, size_t size)
+void *ft_memchr(void *src, int c ,size_t size)
 {
     size_t i = 0;
     unsigned char *s = (unsigned char*) src;
-    unsigned char *d = (unsigned char*) dest;
-    
+
     while (i < size)
     {
-        d[i] = s[i];
+        if (c == s[i])
+            return (&s[i]);
         i++;
     }
-    return (dest);
+    return (NULL);
 }
 
-// int main(int argc, char *argv[])
-// {
-//     char *a = argv[1];
-//     char *b = argv[2];
-//     ft_memcpy (a,b,ft_atoi(argv[3]));
-//     printf("%s\n",a);
-// }
+int main(int argc, char *argv[])
+{
+    char *a = argv[1];
+    char b = argv[2][0];
+    char *c = ft_memchr (a,b,ft_atoi(argv[3]));
+    printf("%s\n",c);
+}

@@ -1,35 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/21 19:01:57 by carl              #+#    #+#             */
-/*   Updated: 2025/08/31 17:55:54 by carl             ###   ########.fr       */
+/*   Created: 2025/08/31 18:20:07 by carl              #+#    #+#             */
+/*   Updated: 2025/08/31 18:28:33 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void *ft_memcpy (void *dest, void *src, size_t size)
+int ft_memcmp (const void *ptr1, const void *ptr2, size_t size)
 {
     size_t i = 0;
-    unsigned char *s = (unsigned char*) src;
-    unsigned char *d = (unsigned char*) dest;
+    unsigned char *p1 = (unsigned char *) ptr1;
+    unsigned char *p2 = (unsigned char *) ptr2;
     
     while (i < size)
     {
-        d[i] = s[i];
+        if(p1[i] != p2[i])
+            return (p1[i] - p2[i]);
         i++;
     }
-    return (dest);
+    return (0);
 }
-
-// int main(int argc, char *argv[])
-// {
-//     char *a = argv[1];
-//     char *b = argv[2];
-//     ft_memcpy (a,b,ft_atoi(argv[3]));
-//     printf("%s\n",a);
-// }

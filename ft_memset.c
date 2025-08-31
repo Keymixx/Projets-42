@@ -6,18 +6,18 @@
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 16:41:13 by carl              #+#    #+#             */
-/*   Updated: 2025/08/21 18:20:45 by carl             ###   ########.fr       */
+/*   Updated: 2025/08/31 18:02:09 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void *ft_memset (void *ptr, int val, int n)
+void *ft_memset (void *ptr, int val, size_t size)
 {
-    int i = 0;
+    size_t i = 0;
     unsigned char *p = (unsigned char*) ptr;
     
-    while (i < n)
+    while (i < size)
     {
         p[i] = val;
         i++;
