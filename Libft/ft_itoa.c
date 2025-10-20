@@ -1,0 +1,78 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/17 16:28:06 by caaubert          #+#    #+#             */
+/*   Updated: 2025/10/20 23:08:41 by caaubert         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
+
+void	ft_swap(char *str)
+{
+	int		i;
+	int		len;
+	char	temp;
+
+	i = 0;
+	len = ft_strlen(str);
+	while (i < (len / 2))
+	{
+		temp = str[i];
+		str[i] = str[len - i - 1];
+		str[len - i - 1] = temp;
+		i++;
+	}
+}
+
+int	ft_intlen(int n)
+{
+	int	dig;
+
+	dig = 0;
+	while (n != 0)
+	{
+		n = n / 10;
+		dig++;
+	}
+	return (dig);
+}
+
+int	ft_isneg(int n)
+{
+	if (n < 0)
+		return (1);
+	else
+		return (0);
+}
+
+char	*ft_itoa(int n)
+{
+	char			*array;
+	int				i;;
+	unsigned int	num;
+
+	if(n == 0)
+		return (ft_strdup("0"));
+	if (ft_isneg(n))
+		num = -n;
+	else
+		num = n;
+	array = malloc(ft_intlen(n) * sizeof(char) + ft_isneg(n) + 1);
+	if (!array)
+		return (NULL);
+	i = 0;
+	while (i < ft_intlen(n))
+	{
+		array[i++] = ((num % 10) + '0');
+		num = num / 10;
+	}
+	if (ft_isneg(n))
+		array[i++] = '-';
+	array[i] = '\0';
+	return (ft_swap(array), array);
+}
