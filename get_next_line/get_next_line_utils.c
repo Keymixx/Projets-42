@@ -6,7 +6,7 @@
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 22:03:17 by carl              #+#    #+#             */
-/*   Updated: 2025/10/28 02:44:51 by carl             ###   ########.fr       */
+/*   Updated: 2025/10/28 15:18:35 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,26 @@ char	*ft_strjoin(char *s1, char *s2)
 	int		i;
 	int		j;	
 
+	if(s1 == NULL || s1[0] == '\0')
+	{
+		join = ft_strdup(s2);
+		return (join);
+	}
 	i = 0;
 	j = 0;
-    if (s1 == NULL)
-        return (join = ft_strdup(s2));
 	len = (ft_strlen(s1) + ft_strlen(s2)) + 1;
+	printf("DEBUG strjoin: s2 = [%s]\n", s2);
+	printf("DEBUG strjoin: s1 = [%s]\n", s1);
+	printf("s2[0] = %c\n",s2[0]);
 	join = malloc(sizeof(char) * len);
 	if (!join)
 		return (NULL);
 	while (s1[i])
 		join[i] = s1[i++];
+	printf("i = %d\n",i);
 	while (s2[j])
 		join[i + j] = s2[j++];
 	join[i + j] = '\0';
-    i = 0;
-    free(s1);
+	printf("DEBUG strjoin: result = [%s]\n", join);
 	return (join);
 }

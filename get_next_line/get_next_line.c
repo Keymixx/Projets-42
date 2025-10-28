@@ -6,25 +6,32 @@
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 21:31:36 by carl              #+#    #+#             */
-/*   Updated: 2025/10/28 02:43:56 by carl             ###   ########.fr       */
+/*   Updated: 2025/10/28 15:22:55 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_take_remind(char *buffer)
+char	*ft_take_stock(char *buffer)
 {
 	int		i;
+	int		j;
 	char	*line;
 
 	i = 0;
-	while (buffer[i] != '\n')
+	j = 0;
+	while (buffer[i] != '\n' && buffer[i])
 		i++;
-	i++;
+	if (buffer[i] == '\n')
+		i++;
+	if (!buffer)
+		return (NULL);
 	line = malloc(sizeof(char) * (ft_strlen(buffer) - i) + 1);
+	if (!line)
+		return (NULL);
 	while (buffer[i])
-		line[i] = buffer[i++];
-	line[i] = '\0';
+		line[j++] = buffer[i++];
+	line[j] = '\0';
 	return (line);
 	
 }
@@ -35,11 +42,15 @@ char	*ft_take_line(char *buffer)
 	char	*line;
 
 	i = 0;
-	while (buffer[i] != '\n')
+	while (buffer[i] != '\n' && buffer[i])
+		i++;
+	if (buffer[i] == '\n')
 		i++;
 	line = malloc(sizeof(char) * (i + 1));
+	if (!line)
+		return (NULL);
 	i = 0;
-	while (buffer[i] != '\n')
+	while (buffer[i] != '\n' && buffer[i])
 		line[i] = buffer[i++];
 	line[i] = '\0';
 	return (line);
@@ -48,7 +59,8 @@ char	*ft_take_line(char *buffer)
 int ft_chr_n(char *buffer)
 {
 	int i = 0;
-
+	if(!buffer)
+		return 0;
 	while (buffer[i])
 	{
 		if (buffer[i] == '\n')
@@ -58,37 +70,34 @@ int ft_chr_n(char *buffer)
 	return (0);
 }
 
+// char *ft_get_line(buffer)
+// {
+	
+// }
+
 char	*get_next_line(int fd)
 {
-	static char	*reminder;
-    char		buffer[BUFFER_SIZE];
+	static char	*stock;
+	char		*temp;
+    char		buffer[BUFFER_SIZE + 1];
 	char		*line;
     ssize_t		bytes_read;
 	int			n_find;
 	
-	n_find = 0;
-	line = NULL;
-	bytes_read = read(fd, buffer, BUFFER_SIZE - 1);
-	if (bytes_read == 0)
-		return (NULL);;
-	while (bytes_read > 0 && n_find == 0)
+	bytes_read = 1;
+	stock = NULL;
+	while (bytes_read > 0 && !ft_chr_n(stock))
 	{
-		buffer[bytes_read + 1] = '\0'; 
-		reminder = ft_strjoin(reminder,buffer);
-		if (ft_chr_n(buffer))
+		bytes_read = read(fd, buffer, BUFFER_SIZE - 1);
+		if(bytes_read > 0)
 		{
-			line = ft_strjoin(line ,ft_take_line(buffer));
-			reminder = ft_take_remind(buffer);
-			n_find++;
+			buffer[bytes_read] = '\0';
+			temp = stock;
+   			stock = ft_strjoin(temp, buffer);
 		}
-		else
-		{
-			line = ft_strjoin(line,buffer);
-			printf("%s\n",line);
-		}
-		if (n_find == 0)
-    		bytes_read = read(fd, buffer, BUFFER_SIZE - 1);
 	}
+	line = ft_take_line(stock);
+	stock = ft_take_stock(stock);
 	return (line);
 }
 
