@@ -6,7 +6,7 @@
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 20:48:53 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/15 04:28:55 by carl             ###   ########.fr       */
+/*   Updated: 2025/11/15 21:00:46 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,9 @@ int find_target(t_stack *a, int index);
 void algo(t_stack **a, t_stack **b);
 int choose_best(t_stack *a, t_stack *b);
 void sort_stack(t_stack **a, t_stack **b, int pos_b);
-void print_stack(t_stack *stack);
 void sort_three(t_stack **a);
+void homemade_sort(t_stack **a, t_stack **b);
+bool already_sort(t_stack *a);
 
 
 

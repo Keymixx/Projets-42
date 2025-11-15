@@ -6,7 +6,7 @@
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 01:59:12 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/14 20:36:27 by carl             ###   ########.fr       */
+/*   Updated: 2025/11/15 19:45:26 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,17 @@ void	lstadd_back(t_stack **lst, t_stack *new)
 
 void	lstclear(t_stack **lst)
 {
-	t_stack	*temp;
+	t_stack	*current;
+	t_stack *next;
 
-	while (*lst)
+	if(!lst || !*lst)
+		return;
+	current = *lst;
+	while (current)
 	{
-		temp = (*lst)->next;
-		free(lst);
-		*lst = temp;
+		next= current->next;
+		free(current);
+		current = next;
 	}
-	free(*lst);
-	*lst = NULL;
+	*lst = NULL; 
 }

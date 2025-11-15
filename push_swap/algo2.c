@@ -6,7 +6,7 @@
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:23:37 by carl              #+#    #+#             */
-/*   Updated: 2025/11/15 04:29:21 by carl             ###   ########.fr       */
+/*   Updated: 2025/11/15 21:15:56 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,17 @@ void algo(t_stack **a, t_stack **b)
 {
     int best_pos;
     int r_a_count;
+
+    if (already_sort(*a))
+        return;
+    if (lstsize(*a) <= 5)
+    {
+           homemade_sort(a, b);
+           return;
+    }
     while (lstsize(*a) > 3)
         pb(a,b);
-    sort_three(a); 
+    sort_three(a);
     while (*b != NULL)
     {
          best_pos = choose_best(*a, *b);
