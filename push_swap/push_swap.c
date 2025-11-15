@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 01:47:09 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/11 03:43:03 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/11/15 04:25:16 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,28 @@ int main(int argc, char *argv[])
 	stack_a = build_stack(argc, argv);
 	if (stack_a == NULL)
 		return (error());
-	print_stack(stack_a);
 	ft_printf("\n");
-	sa(&stack_a);
-	pb(&stack_a, &stack_b);
-	pb(&stack_a, &stack_b);
-	pb(&stack_a, &stack_b);
-	sa(&stack_a);
-	pa(&stack_b, &stack_a);
-	pa(&stack_b, &stack_a);
-	pa(&stack_b, &stack_a);
+	ft_printf("stack a :\n");
+	print_stack(stack_a);
+	ft_printf("stack b :\n");
+	print_stack(stack_b);
+	ft_printf("\n");
+	
+	// rr(&stack_a, &stack_b);
+	// ra(&stack_a);
+	// rb(&stack_b);
+	// rra(&stack_a);
+	// rrb(&stack_b);
+	// rrr(&stack_a, &stack_b);
+
+	// rra(&stack_a);
+	// rra(&stack_a);
+	// rb(&stack_b);
+	// ft_printf("%d\n",choose_best(stack_a,stack_b));
+	// sort_stack(&stack_a, &stack_b, 0);
+	// ft_printf("%p\n", stack_b);
+	algo(&stack_a, &stack_b);
+	// sort_three(&stack_a);
 	ft_printf("\nstack a :\n");
 	print_stack(stack_a);
 	ft_printf("stack b :\n");

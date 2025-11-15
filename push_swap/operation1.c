@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   operation1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 20:10:25 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/10 02:48:03 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/11/15 04:27:35 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void sa(t_stack **stack)
 	(*stack)->next = (*stack)->next->next;
 	*stack = temp1;
 	(*stack)->next = temp2;
+	ft_printf("sa\n");
 }
 
 void sb(t_stack **stack)
@@ -31,42 +32,61 @@ void sb(t_stack **stack)
 	t_stack *temp1;
 	t_stack *temp2;
 
-	if(!stack || !(*stack)->next)
+	if(!*stack || !(*stack)->next)
 		return;
 	temp1 = (*stack)->next;
 	temp2 = *stack;
 	(*stack)->next = (*stack)->next->next;
 	*stack = temp1;
 	(*stack)->next = temp2;
+	ft_printf("sb\n");
 }
 
 
-void ss(t_stack **stack_a, t_stack **stack_b)
+void ss(t_stack **a, t_stack **b)
 {
-	sa(stack_a);
-	sb(stack_b);
+	t_stack *temp1;
+	t_stack *temp2;
+	
+	if(!*a || !(*a)->next || !*b || !(*b)->next)
+		return;
+	temp1 = (*a)->next;
+	temp2 = *a;
+	(*a)->next = (*a)->next->next;
+	*a = temp1;
+	(*a)->next = temp2;
+	
+	temp1 = (*b)->next;
+	temp2 = *b;
+	(*b)->next = (*b)->next->next;
+	*b = temp1;
+	(*b)->next = temp2;
+	
+	ft_printf("ss\n");
 }
 
-void pa(t_stack **stack_a,t_stack **stack_b)
+void pb(t_stack **a,t_stack **b)
 {
 	t_stack *temp;
 	
-	if(!*stack_a)
+	if(!*a)
 		return;
-	temp = *stack_a;
-	*stack_a = (*stack_a)->next;
-	temp->next = *stack_b;
-	*stack_b = temp;
+	temp = *a;
+	*a = (*a)->next;
+	temp->next = *b;
+	*b = temp;
+	ft_printf("pb\n");
 }
 
-void pb(t_stack **stack_b,t_stack **stack_a)
+void pa(t_stack **b,t_stack **a)
 {
 	t_stack *temp;
 	
-	if(!*stack_b)
+	if(!*b)
 		return;
-	temp = *stack_b;
-	*stack_b = (*stack_b)->next;
-	temp->next = *stack_a;
-	*stack_a = temp;
+	temp = *b;
+	*b = (*b)->next;
+	temp->next = *a;
+	*a = temp;
+	ft_printf("pa\n");
 }

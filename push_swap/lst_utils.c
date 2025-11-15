@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lst_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 01:59:12 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/10 02:29:16 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/11/14 20:36:27 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,22 @@ t_stack	*lstnew(int num, int index)
 	node->next = NULL;
 	return (node);
 }
-void	lstadd_front(t_stack **lst, t_stack *new)
+
+int	lstsize(t_stack *lst)
 {
-	new->next = *lst;
-	*lst = new;
+	int		size;
+	t_stack	*cpylst;
+
+	size = 0;
+	cpylst = lst;
+	while (cpylst != NULL)
+	{
+		cpylst = cpylst->next;
+		size++;
+	}
+	return (size);
 }
+
 
 t_stack	*lstlast(t_stack *lst)
 {

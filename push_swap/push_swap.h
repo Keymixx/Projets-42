@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 20:48:53 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/10 02:29:37 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/11/15 04:28:55 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,24 +28,36 @@ typedef struct s_stack
 #include <stdbool.h>
 #include <limits.h>
 
-int is_valid_int(const char *num);
+bool is_valid_int(const char *num);
 bool check_string(char *argv);
 bool check_params(int argc,char *argv[]);
 t_stack	*lstnew(int num, int index);
 t_stack	*lstlast(t_stack *lst);
-void	lstadd_front(t_stack **lst, t_stack *new);
+int		lstsize(t_stack *lst);
 void	lstadd_back(t_stack **lst, t_stack *new);
 void	lstclear(t_stack **lst);
 t_stack *build_stack(int count, char *params[]);
 void sa(t_stack **stack);
 void sb(t_stack **stack);
 void ss(t_stack **stack_a, t_stack **stack_b);
-void pa(t_stack **stack_a,t_stack **stack_b);
-void pb(t_stack **stack_b,t_stack **stack_a);
+void pa(t_stack **b,t_stack **a);
+void pb(t_stack **stack_a,t_stack **stack_b);
 void ra(t_stack **stack);
+void rb(t_stack **stack);
+void rr(t_stack **a, t_stack **b);
 void rra(t_stack **stack);
+void rrb(t_stack **stack);
+void rrr(t_stack **a, t_stack **b);
 t_stack	*lstlast_last(t_stack *lst);
-
+int calcul_cost(t_stack *a, t_stack *b, int pos_b);
+int find_min(t_stack *a);
+int find_index(t_stack *b, int pos_b);
+int find_target(t_stack *a, int index);
+void algo(t_stack **a, t_stack **b);
+int choose_best(t_stack *a, t_stack *b);
+void sort_stack(t_stack **a, t_stack **b, int pos_b);
+void print_stack(t_stack *stack);
+void sort_three(t_stack **a);
 
 
 

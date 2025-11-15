@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_intlen.c                                        :+:      :+:    :+:   */
+/*   algo3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/08 22:37:26 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/15 04:24:09 by carl             ###   ########.fr       */
+/*   Created: 2025/11/15 03:16:59 by carl              #+#    #+#             */
+/*   Updated: 2025/11/15 04:28:48 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_intlen(int n)
-{
-	int	dig;
+#include "push_swap.h"
 
-	if (n == 0)
-		return (1);
-	dig = 0;
-	if (n < 0)
-		dig++;
-	while (n != 0)
-	{
-		n = n / 10;
-		dig++;
-	}
-	return (dig);
+void sort_three(t_stack **a) 
+{
+    int first;
+    int second;
+    int third;
+
+    first = (*a)->index;
+    second = (*a)->next->index;
+    third = (*a)->next->next->index;
+    if (first > second && second < third)
+        sa(a);
+    else if (third > second && second > first)
+    {
+        sa(a);
+        rra(a);
+    }
 }

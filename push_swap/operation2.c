@@ -3,41 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   operation2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 00:52:25 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/10 02:49:49 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/11/15 04:08:52 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void ra(t_stack **stack)
+void ra(t_stack **a)
 {
 	t_stack *temp;
 
-	if (!(*stack)->next)
+	if (!(*a)->next)
 		return;
-	temp = *stack;
-	*stack = (*stack)->next;
+	temp = *a;
+	*a= (*a)->next;
 	temp->next = NULL;
-	lstlast(*stack)->next = temp;
+	lstlast(*a)->next = temp;
+	ft_printf("ra\n");
 }
 
-void rb(t_stack **stack)
+void rb(t_stack **b)
 {
 	t_stack *temp;
 
-	if (!(*stack)->next)
+	if (!(*b)->next)
 		return;
-	temp = *stack;
-	*stack = (*stack)->next;
+	temp = *b;
+	*b = (*b)->next;
 	temp->next = NULL;
-	lstlast(*stack)->next = temp;
+	lstlast(*b)->next = temp;
+	ft_printf("rb\n");
 }
 
-void rr(t_stack **stack)
+void rr(t_stack **a, t_stack **b)
 {
-	ra(stack);
-	rb(stack);
+	t_stack *temp;
+
+	if (!(*a)->next || !(*b)->next)
+		return;
+	temp = *a;
+	*a= (*a)->next;
+	temp->next = NULL;
+	lstlast(*a)->next = temp;
+	temp = *b;
+	*b = (*b)->next;
+	temp->next = NULL;
+	lstlast(*b)->next = temp;
+	ft_printf("rr\n");
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 01:07:16 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/09 19:29:35 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/11/15 04:24:58 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool check_digit(char *str)
 	return (true);
 }
 
-int is_valid_int(const char *num)
+bool is_valid_int(const char *num)
 {
 	long long		tot;
 	int				i;
@@ -43,12 +43,12 @@ int is_valid_int(const char *num)
 		sign = -1;
 		i++;
 	}
-	while (isdigit(num[i]))
+	while (ft_isdigit(num[i]))
 		tot = tot * 10 + (num[i++] - '0');
 	tot = tot * sign;
 	if (tot > INT_MAX || tot < INT_MIN)
-		return (0);
-	return (tot);
+		return (false);
+	return (true);
 }
 
 bool check_string(char *argv)
@@ -62,7 +62,7 @@ bool check_string(char *argv)
 		return (false);
 	while (argv[i])
 	{
-		if (isdigit(argv[i]) || argv[i] == '+' || argv[i] == '-')
+		if (ft_isdigit(argv[i]) || argv[i] == '+' || argv[i] == '-')
 		{
 			if(!is_valid_int(&argv[i]))
 				return (false);

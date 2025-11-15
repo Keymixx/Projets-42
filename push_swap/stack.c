@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 01:33:31 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/09 21:27:25 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/11/14 23:19:55 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int build_stack_params(t_stack **stack_a, int count, char *params[])
 		lstadd_back(stack_a, lstnew(ft_atoi(params[i]),index));
 		i++;
 	}
-	write(1,"a",1);
 	return (1);
 }
 
