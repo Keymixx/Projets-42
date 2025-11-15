@@ -1,23 +1,36 @@
-NAME = push_swap.a
-SRCS = Libft/*.c ft_printf/*.c main.c
-OBJS = $(SRCS:.c=.o)
+NAME = push_swap
 
-CC = cc
-RM = rm -f
-CFLAGS	= -Wall -Wextra -Werror -I.
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -I includes -I Libft
+
+SRC =  src/main.c \
+	   src/lst_utils.c \
+       src/parsing/user_input.c \
+	   src/parsing/stack.c \
+       src/algo/sort.c \
+       src/algo/calcul_cost.c \
+       src/algo/turk_algo.c \
+       src/operation/operation1.c \
+       src/operation/operation2.c \
+       src/operation/operation3.c
+
+OBJ = $(SRC:.c=.o)
+
+LIBFT = Libft/libft.a
+
+all: $(NAME)
+
+$(LIBFT):
+	$(MAKE) -C Libft
 
 
-all:			$(NAME)
-
-$(NAME):		$(OBJS)
-				ar rcs $(NAME) $(OBJS)
+$(NAME): $(OBJ) $(LIBFT) 
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 
 clean:
-				$(RM) $(OBJS) $(BONUS_OBJS)
+	rm -f $(OBJ)
 
-fclean:			clean
-				$(RM) $(NAME)
+fclean: clean
+	rm -f $(NAME)
 
-re:				fclean $(NAME)
-
-.PHONY:			all clean fclean re bonus
+re: fclean all
