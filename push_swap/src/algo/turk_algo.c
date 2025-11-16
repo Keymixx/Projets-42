@@ -6,7 +6,7 @@
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:23:37 by carl              #+#    #+#             */
-/*   Updated: 2025/11/16 00:25:36 by carl             ###   ########.fr       */
+/*   Updated: 2025/11/16 01:16:45 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,21 +79,25 @@ void sort_stack(t_stack **a, t_stack **b, int pos_b)
         r_a_count++;
         r_b_count++;
     }
-    while (r_b_count-- > 0)
+    while (r_b_count > 0)
     {
         rb(b);
+        r_b_count--;
     }
-    while (r_b_count++ < 0)
+    while (r_b_count < 0)
     {
         rrb(b);
+        r_b_count++;
     }
-    while (r_a_count-- > 0)
+    while (r_a_count > 0)
     {
         ra(a);
+        r_a_count--;
     }
-    while (r_a_count++< 0)
+    while (r_a_count < 0)
     {
         rra(a);
+        r_a_count++;
     }
 }
 
