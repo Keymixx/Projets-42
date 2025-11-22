@@ -5,124 +5,81 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/15 03:16:59 by carl              #+#    #+#             */
-/*   Updated: 2025/11/16 19:43:10 by caaubert         ###   ########.fr       */
+/*   Created: 2025/11/17 23:17:51 by caaubert          #+#    #+#             */
+/*   Updated: 2025/11/17 23:46:35 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/push_swap.h"
 
-bool already_sort(t_stack *a)
+int	count_rotation_b(t_stack *b, int pos_b)
 {
-    t_stack *current;
-    int     previous;
+	int	count_rotation;
 
-    current = a;
-    previous = INT_MIN;
-    while (current)
-    {
-        if (current->index < previous)
-            return (false);
-        previous = current->index;
-        current = current->next; 
-    }
-    return (true);
+	count_rotation = 0;
+	if (pos_b <= (lstsize(b) / 2))
+		count_rotation = pos_b;
+	else
+		count_rotation -= lstsize(b) - pos_b;
+	return (count_rotation);
 }
 
-void sort_three(t_stack **a) 
+int	count_rotation_a(t_stack *a, t_stack *b, int pos_b)
 {
-    int first;
-    int second;
-    int third;
+	int	count_rotation;
+	int	pos_a;
 
-    first = (*a)->index;
-    second = (*a)->next->index;
-    third = (*a)->next->next->index;
-    if (first > second && second > third)
-    {
-        sa(a);
-        rra(a);
-    }    
-    else if (first < second && second > third && first > third) 
-        rra(a);
-    else if (first < second && second > third && first < third)
-    {
-        rra(a);
-        sa(a);
-    }
-	else if (first > second && second < third && first < third)
-        sa(a);
-    else if (first > second && second < third)
-    {
-        rra(a);
-        rra(a);
-    }
+	count_rotation = 0;
+	pos_a = find_target(a, find_index(b, pos_b));
+	if (pos_a <= (lstsize(a) / 2))
+		count_rotation = pos_a;
+	else
+		count_rotation -= lstsize(a) - pos_a;
+	return (count_rotation);
 }
 
-void sort_five(t_stack **a, t_stack **b) 
+void	mini_sort_stack(t_stack **a, t_stack **b, int c_a, int c_b)
 {
-    int min_pos;
-    
-    min_pos = find_min(*a);
-    if (min_pos == 1)
-        sa(a);
-    else if (min_pos == 2) 
-    {
-        ra(a);
-        ra(a);
-    }
-    else if (min_pos == 3) 
-    {
-        rra(a);
-        rra(a);
-    }
-    else if (min_pos == 4)
-        rra(a);
-    pb(a, b);
-    min_pos = find_min(*a); 
-    if (min_pos == 1)
-        sa(a);
-    else if (min_pos == 2) {
-        ra(a);
-        ra(a);
-    }
-    else if (min_pos == 3)
-        rra(a);
-    pb(a, b);
-    sort_three(a);
-    pa(b, a);
-    pa(b, a);
+	while (c_b > 0)
+	{
+		rb(b);
+		c_b--;
+	}
+	while (c_b < 0)
+	{
+		rrb(b);
+		c_b++;
+	}
+	while (c_a > 0)
+	{
+		ra(a);
+		c_a--;
+	}
+	while (c_a < 0)
+	{
+		rra(a);
+		c_a++;
+	}
 }
 
-
-void sort_four(t_stack **a, t_stack **b) 
-{   
-    int min_pos = find_min(*a);
-
-    if (min_pos == 1)
-        sa(a);
-    else if (min_pos == 2) 
-    {
-        ra(a);
-        ra(a);
-    }
-    else if (min_pos == 3)
-        rra(a);
-    pb(a, b);
-    sort_three(a);
-    pa(a, b);
-}
-
-void homemade_sort(t_stack **a, t_stack **b)
+void	sort_stack(t_stack **a, t_stack **b, int pos_b)
 {
-    if (lstsize(*a) == 1)
-        return;
-    else if (lstsize(*a) == 2 && ((*a)->index > (*a)->next->index))
-        sa(a);
-    else if (lstsize(*a) == 3)
-        sort_three(a);
-    else if (lstsize(*a) == 4)
-        sort_four(a, b);
-    else if (lstsize(*a) == 5)
-        sort_five(a, b);
+	int	r_a_count;
+	int	r_b_count;
+
+	r_a_count = count_rotation_a(*a, *b, pos_b);
+	r_b_count = count_rotation_b(*b, pos_b);
+	while (r_b_count > 0 && r_a_count > 0)
+	{
+		rr(a, b);
+		r_a_count--;
+		r_b_count--;
+	}
+	while (r_b_count < 0 && r_a_count < 0)
+	{
+		rrr(a, b);
+		r_a_count++;
+		r_b_count++;
+	}
+	mini_sort_stack(a, b, r_a_count, r_b_count);
 }

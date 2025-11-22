@@ -6,17 +6,17 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 01:33:31 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/16 17:22:59 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/11/18 01:31:31 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/push_swap.h"
 
-int	choose_index(char **split, int n)
+int	choose_index_string(char **split, int n)
 {
 	int	i;
-	int index;
-	
+	int	index;
+
 	i = 0;
 	index = 0;
 	while (split[i])
@@ -27,22 +27,30 @@ int	choose_index(char **split, int n)
 			index++;
 		i++;
 	}
-	return(index);
+	return (index);
 }
 
-void	free_split(char **split)
+int	choose_index_params(char **params, int n)
 {
 	int	i;
+	int	index;
 
-	i = 0;
-	while (split[i])
-		free(split[i++]);
-	free (split);
+	i = 1;
+	index = 0;
+	while (params[i])
+	{
+		if (ft_atoi(params[i]) == ft_atoi(params[n]) && n != i)
+			return (-1);
+		if (ft_atoi(params[i]) < ft_atoi(params[n]) && n != i)
+			index++;
+		i++;
+	}
+	return (index);
 }
 
-int build_stack_str(t_stack **stack_a, char *str)
+int	build_stack_str(t_stack **stack_a, char *str)
 {
-	char 	**split;
+	char	**split;
 	int		i;
 	int		index;
 
@@ -50,9 +58,13 @@ int build_stack_str(t_stack **stack_a, char *str)
 	split = ft_split(str, ' ');
 	while (split[i])
 	{
-		index = choose_index(split, i);
+		index = choose_index_string(split, i);
 		if (index == -1)
+		{
+			free_split(split);
+			lstclear(stack_a);
 			return (0);
+		}
 		lstadd_back(stack_a, lstnew(ft_atoi(split[i]), index));
 		i++;
 	}
@@ -60,28 +72,26 @@ int build_stack_str(t_stack **stack_a, char *str)
 	return (1);
 }
 
-int build_stack_params(t_stack **stack_a, int count, char *params[])
+bool	build_stack_params(t_stack **stack_a, int count, char *params[])
 {
-	int		i;
-	int		index;
+	int	i;
+	int	index;
 
-	
 	i = 1;
 	while (i < count)
 	{
-		index = choose_index(params, i);
+		index = choose_index_params(params, i);
 		if (index == -1)
-			return (0);
-		lstadd_back(stack_a, lstnew(ft_atoi(params[i]),index));
+			return (false);
+		lstadd_back(stack_a, lstnew(ft_atoi(params[i]), index));
 		i++;
 	}
-	return (1);
+	return (true);
 }
 
-
-t_stack *build_stack(int count, char *params[])
+t_stack	*build_stack(int count, char *params[])
 {
-	t_stack *stack_a;
+	t_stack	*stack_a;
 
 	stack_a = NULL;
 	if (count == 2)
@@ -89,10 +99,10 @@ t_stack *build_stack(int count, char *params[])
 		if (!build_stack_str(&stack_a, params[1]))
 			return (NULL);
 	}
-	else 
+	else
 	{
 		if (!build_stack_params(&stack_a, count, params))
 			return (NULL);
 	}
 	return (stack_a);
-} 
+}

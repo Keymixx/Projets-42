@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst_utils.c                                        :+:      :+:    :+:   */
+/*   lst_utils1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 01:59:12 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/16 17:22:43 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/11/17 23:09:58 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	lstsize(t_stack *lst)
 	}
 	return (size);
 }
-
 
 t_stack	*lstlast(t_stack *lst)
 {
@@ -75,21 +74,4 @@ void	lstadd_back(t_stack **lst, t_stack *new)
 		*lst = new;
 	else
 		lstlast(*lst)->next = new;
-}
-
-void	lstclear(t_stack **lst)
-{
-	t_stack	*current;
-	t_stack *next;
-
-	if(!lst || !*lst)
-		return;
-	current = *lst;
-	while (current)
-	{
-		next= current->next;
-		free(current);
-		current = next;
-	}
-	*lst = NULL; 
 }
