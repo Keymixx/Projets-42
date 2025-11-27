@@ -7,7 +7,8 @@ MLXFLAGS	= -Lminilibx-linux -lmlx -lXext -lX11 -lm
 SRCS		=	srcs/so_long.c \
 				srcs/parsing/check_map_size.c \
 				srcs/parsing/check_file.c \
-				srcs/parsing/create_map.c
+				srcs/parsing/create_map.c \
+				srcs/event/close_win.c
 
 OBJS		= $(SRCS:.c=.o)
 

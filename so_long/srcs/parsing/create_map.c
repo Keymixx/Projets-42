@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 01:10:51 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/25 22:08:04 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/11/27 23:54:31 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ char **create_tab_map(char *filname)
 		buf = get_next_line(fd);
 	}
 	free(buf);
+	printf("DEBUG: map = %p\n", map);  // Ajoute ça
 	if(double_n(map))
 		return (ft_putstr_fd("Error\ninvalid map\n", 2), NULL);
 	tab_map = ft_split(map,'\n');

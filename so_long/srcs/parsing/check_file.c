@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 01:01:16 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/25 01:32:05 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/11/27 23:19:10 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ bool check_args(int argc, char *argv[])
 	return (true);
 }
 
-bool check(char **tab_map, t_map_size *map_size)
+bool check(char **tab_map, t_map_data *data)
 {
 	if (!tab_map)
 		return (false);
-	if (!check_map(tab_map, map_size))
+	if (!check_map(tab_map, data))
 		return (false);
 	return (true);
 }	
