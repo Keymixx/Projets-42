@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 01:10:51 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/27 23:54:31 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/12/01 13:05:40 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,12 @@ static bool double_n(char *str)
 
 char **create_tab_map(char *filname)
 {
-	int	i;
 	int fd;
 	char *buf;
 	char *map;
 	char **tab_map;
 
 	map = NULL;
-	i = 0;
 	fd = open(filname, O_RDONLY);
 	if (!fd)
 		return (ft_putstr_fd("Error\ncannot open the file\n", 2), free(map), NULL);

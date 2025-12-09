@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 22:32:47 by caaubert          #+#    #+#             */
-/*   Updated: 2025/11/28 00:16:48 by caaubert         ###   ########.fr       */
+/*   Updated: 2025/12/01 13:38:57 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,19 @@ void	create_map(char **tab_map, t_map_data *data, t_img_data *img)
 		i++;
 	}
 }
+bool is_valid_move(t_map_data *data, int new_pose_x, int new_pose_y)
+{
+	
+}
 
 int	move_player(int keycode, t_map_data *data)
 {
-	if (keycode == LT_ARROW)
+	int new_pose_x;
+	int new_pose_y;
+
+	new_pose_x = data->player.pos_x;
+	new_pose_y = data->player.pos_y;
+	if (keycode == LT_ARROW && is_valid_move(data, new_pose_x + 64, new_pose_y))
 		data->player.pos_x -= 64;
 	if (keycode == RT_ARROW)
 		data->player.pos_x += 64;
@@ -63,7 +72,7 @@ int	move_player(int keycode, t_map_data *data)
 		data->player.pos_y -= 64;
 	if (keycode == DN_ARROW)
 		data->player.pos_y += 64;
-	mlx_put_image_to_window(data->mlx, data->win_mlx, data->player.img, data->player.pos_x , data->size_y);
+	mlx_put_image_to_window(data->mlx, data->win_mlx, data->player.img, data->player.pos_x , data->player.pos_y);
 	return (0);
 }
 
@@ -84,14 +93,13 @@ int	main(int argc, char *argv[])
 {
 	t_map_data	data;
 	t_img_data	img;
-	char		**tab_map;
 
 	if (!check_args(argc, argv))
 		exit(EXIT_FAILURE);
-	tab_map = create_tab_map(argv[1]);
-	if (!check(tab_map, &data))
+	data.tab_map = create_tab_map(argv[1]);
+	if (!check(data.tab_map, &data))
 	{
-		ft_free(tab_map);
+		ft_free(data.tab_map);
 		exit(EXIT_FAILURE);
 	}
 		
@@ -102,9 +110,8 @@ int	main(int argc, char *argv[])
 	data.win_mlx = mlx_new_window(data.mlx, data.size_x, data.size_y, "CARL");
 	init_img(&img, &data);	
 	// mlx_key_hook(data.win_mlx, &close_win, &data);
-	create_map(tab_map, &data, &img);
+	create_map(data.tab_map, &data, &img);
 	mlx_key_hook(data.win_mlx, &move_player, &data);
-	write(1,"a",1);
 	mlx_loop(data.mlx);
-	ft_free(tab_map);
+	ft_free(data.tab_map);
 }
