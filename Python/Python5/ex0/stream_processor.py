@@ -44,7 +44,7 @@ class NumericProcessor(DataProcessor):
 
 
 class TextProcessor(DataProcessor):
-	def validate(self, data) -> bool:
+	def validate(self, data: Any) -> bool:
 		if isinstance(data, str):
 			split_data = data.split()
 			if split_data[0] in ("ERROR:", "INFO:", "WARNING:") :
@@ -60,7 +60,7 @@ class TextProcessor(DataProcessor):
 
 
 class LogProcessor(DataProcessor):
-	def validate(self, data) -> bool:
+	def validate(self, data: Any) -> bool:
 		if isinstance(data, str):
 			split_data = data.split()
 			if split_data[0] in ("ERROR:", "INFO:", "WARNING:") :
@@ -89,6 +89,7 @@ class LogProcessor(DataProcessor):
 def main():
 	print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===")
 
+	# ========Numeric Processor test=========
 	print("\nInitializing Numeric Processor...")
 	NumProcess = NumericProcessor()
 	data = [1, 2, 3, 4, 5]
@@ -99,6 +100,7 @@ def main():
 	else:
 		print("Validation: Invalid data")
 
+	# ========Text Processor test=========
 	print("\nInitializing Text Processor...")
 	TextProcess = TextProcessor()
 	data = "Hello Nexus World"
@@ -109,6 +111,7 @@ def main():
 	else:
 		print("Validation: Invalid data")
 	
+	# ========Log Processor test=========
 	print("\nInitializing Log Processor...")
 	LogProcess = LogProcessor()
 	data = "ERROR: Connection timeout"
@@ -119,6 +122,7 @@ def main():
 	else:
 		print("Validation: Invalid data")
 	
+	# ========Polymorphic Processor test=========
 	print("\n=== Polymorphic Processing Demo ===")
 	print("Processing multiple data types through same interface...")
 	datas = ["Coucou tout le monde !", [2, 5, 1, 8, 4], "INFO: System ready"]
