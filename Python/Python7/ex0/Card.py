@@ -1,13 +1,20 @@
 from abc import ABC, abstractmethod
+from enum import Enum
+from typing import Dict
+
+class Rarity(Enum):
+    COMMON = "Common"
+    RARE = "Rare"
+    LEGENDARY = "Legendary"
 
 class Card(ABC):
-    def __init__(self, name: str, cost: int, rarity: str):
+    def __init__(self, name: str, cost: int, rarity: Rarity):
         self.name = name
         self.cost = cost
-        self.rarity = rarity
+        self.rarity = rarity.value
 
     @abstractmethod
-    def play(self, game_state: dict) -> dict:
+    def play(self, game_state: Dict) -> dict:
         pass
 
     def get_card_info(self) -> dict:
