@@ -2,10 +2,18 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Dict
 
+
+class Type(Enum):
+    CREATURE = "Creature"
+    SPELL = "Spell"
+    ARTIFACT = "Artifact"
+
+
 class Rarity(Enum):
     COMMON = "Common"
     RARE = "Rare"
     LEGENDARY = "Legendary"
+
 
 class Card(ABC):
     def __init__(self, name: str, cost: int, rarity: Rarity):
