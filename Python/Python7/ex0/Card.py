@@ -23,7 +23,7 @@ class Card(ABC):
 
     @abstractmethod
     def play(self, game_state: Dict) -> dict:
-        pass
+        return
 
     def get_card_info(self) -> dict:
         return {

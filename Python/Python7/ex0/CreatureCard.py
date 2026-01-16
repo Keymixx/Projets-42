@@ -16,6 +16,7 @@ class CreatureCard(Card):
         self.type = Type.CREATURE
 
     def play(self, game_state: Dict) -> dict:
+
         game_state["card_in"].append(self.get_card_info())
         game_state["mana"] -= self.cost
         return {

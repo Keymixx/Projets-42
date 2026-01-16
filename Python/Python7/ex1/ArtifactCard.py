@@ -10,7 +10,14 @@ class ArtifactCard(Card):
         self.type = Type.ARTIFACT
 
     def play(self, game_state: dict) -> dict:
-        pass
+
+        game_state["card_in"].append(self.get_card_info())
+        game_state["mana"] -= self.cost
+        return {
+            "card_played": self.name,
+            "mana_used": self.cost,
+            "effect": self.effect
+        }
 
     def activate_ability(self) -> dict:
         pass
