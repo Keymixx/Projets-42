@@ -20,4 +20,15 @@ class ArtifactCard(Card):
         }
 
     def activate_ability(self) -> dict:
-        pass
+        return {"effect": self.effect}
+    
+
+    def get_card_info(self) -> dict:
+        card_info = super().get_card_info()
+
+        card_info["type"] = self.type.value
+        card_info["durability"] = self.durability
+        card_info["effect"] = self.effect
+
+        return card_info
+    

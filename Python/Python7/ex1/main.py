@@ -1,8 +1,6 @@
 from ex0.CreatureCard import CreatureCard
 from ex0.Card import Rarity, Type
-from ex1 import ArtifactCard
-from ex1 import SpellCard
-from ex1 import Deck
+from ex1 import ArtifactCard, SpellCard, Deck
 
 print("\n=== DataDeck Deck Builder ===\n")
 
@@ -31,16 +29,10 @@ print(f"Deck stats: {carl['deck'].get_deck_stats()}")
 
 print("\nDrawing and playing cards:")
 
-card_drew = carl["deck"].draw_card()
-print(f"\nDrew: {card_drew.name} ({card_drew.type.value})")
-print(f"Play result: {card_drew.play(carl)}")
+for _ in range(3):
 
-card_drew = carl["deck"].draw_card()
-print(f"\nDrew: {card_drew.name} ({card_drew.type.value})")
-print(f"Play result: {card_drew.play(carl)}")
+        card_drew = carl["deck"].draw_card()
+        print(f"\nDrew: {card_drew.name} ({card_drew.type.value})")
+        print(f"Play result: {card_drew.play(carl)}")
 
-card_drew = carl["deck"].draw_card()
-print(f"\nDrew: {card_drew.name} ({card_drew.type.value})")
-print(f"Play result: {card_drew.play(carl)}")
-
-print("Polymorphism in action: Same interface, different card behaviors!")
+print("\nPolymorphism in action: Same interface, different card behaviors!")

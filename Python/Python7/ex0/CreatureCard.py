@@ -36,7 +36,7 @@ class CreatureCard(Card):
     def get_card_info(self) -> dict:
         card_info = super().get_card_info()
 
-        card_info["type"] = self.type
+        card_info["type"] = self.type.value
         card_info["attack"] = self.attack
         card_info["health"] = self.health
 
