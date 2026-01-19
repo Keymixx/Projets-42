@@ -10,7 +10,8 @@ class Effect(Enum):
 
 
 class SpellCard(Card):
-    def __init__(self, name: str, cost: int, rarity: Rarity, effect_type: Effect):
+    def __init__(self, name: str, cost: int,
+                 rarity: Rarity, effect_type: Effect):
         super().__init__(name, cost, rarity)
         self.effect_type = effect_type
         self.type = Type.SPELL
@@ -48,9 +49,8 @@ class SpellCard(Card):
             for target in targets:
                 if target.type == Type.CREATURE:
                     target.attack -= 3
-        
-        return {"effect": self.type.value}
 
+        return {"effect": self.type.value}
 
     def get_card_info(self) -> dict:
         card_info = super().get_card_info()

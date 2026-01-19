@@ -1,18 +1,21 @@
 from ex0.Card import Card, Rarity, Type
-from ex2 import Magical, Combatable
+from ex2.Magical import Magical
+from ex2.Combatable import Combatable
 from enum import Enum
+
 
 class CombatType(Enum):
     MELEE = "Melee"
     RANGED = "Ranged"
     MAGICAL = "Magical"
 
+
 class EliteCard(Card, Magical, Combatable):
 
-    def __init__(self, name: str, cost: int, rarity: Rarity, 
-                 attack_point: int, combat_type: CombatType, health: int, 
+    def __init__(self, name: str, cost: int, rarity: Rarity,
+                 attack_point: int, combat_type: CombatType, health: int,
                  defense_point: int, spells: list):
-        super().__init__(self, name, cost, rarity)
+        super().__init__(name, cost, rarity)
 
         self.attack_point = attack_point
         self.combat_type = combat_type
@@ -23,7 +26,7 @@ class EliteCard(Card, Magical, Combatable):
         self.type = Type.ELITE
 
     def play(self, game_state: dict) -> dict:
-        
+
         game_state["card_in"].append(self.get_card_info())
         game_state["mana"] -= self.cost
         return {
@@ -31,8 +34,6 @@ class EliteCard(Card, Magical, Combatable):
             "mana_used": self.cost,
             "effect": "Elite summoned to battlefield"
         }
-
-
 
     def attack(self, target: Card) -> dict:
         return {
@@ -43,13 +44,13 @@ class EliteCard(Card, Magical, Combatable):
         }
 
     def defend(self, incoming_damage: int) -> dict:
-        damage_blocked = max(self.defense_point, 
-                           self.defense_point - (self.defense_point - incoming_damage))
-        damage_taken = min(0, (self.defense_point - incoming_damage) * -1)
-        
+        damage_blocked = min(self.defense_point, self.defense_point
+                             - (self.defense_point - incoming_damage))
+        damage_taken = max(0, (self.defense_point - incoming_damage) * -1)
+
         if (self.health - damage_taken) <= 0:
             self.still_alive = False
-        
+
         return {
             "defender": self.name,
             "damage_taken": damage_taken,
@@ -66,27 +67,28 @@ class EliteCard(Card, Magical, Combatable):
             "combat_type": self.combat_type.value
         }
 
-
     def cast_spell(self, spell_name: str, targets: list) -> dict:
         find_spell = False
         for spell in self.spells:
             if spell.name == spell_name:
                 find_spell = True
                 actual_spell = spell
-        
+
         if not find_spell:
             return {"error": "Spell not found"}
-        
+
+        actual_target = [target.name for target in targets]
+
         return {
             "caster": self.name,
             "spell": actual_spell.name,
-            "targets": targets,
+            "targets": actual_target,
             "mana_used": actual_spell.cost
         }
 
     def channel_mana(self, amount: int) -> dict:
         return {
-            "channeled": 3,
+            "channeled": amount,
             "total_mana": 7
         }
 
