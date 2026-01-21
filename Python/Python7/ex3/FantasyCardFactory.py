@@ -1,82 +1,93 @@
 from ex0.CreatureCard import CreatureCard
 from ex1.ArtifactCard import ArtifactCard
-from ex1.SpellCard import SpellCard
-from ex0.Card import Card, Type, Rarity
+from ex1.SpellCard import SpellCard, Effect
+from ex0.Card import Card, Rarity
 from ex3.CardFactory import CardFactory
 from random import randint, choice
+
 
 class FantasyCardFactory(CardFactory):
 
     def __init__(self):
-        self.card = {
-            "creatures": [],
-            "spells": [],
-            "artifacts": []
+        self.types = {
+            'creatures': ['Dragon', 'Goblin', "Elve", "Dwarf", "Human"],
+            'spells': ['Fireball', 'Lightnigh Bolt', 'Ice Arrow'],
+            'artifacts': ['Mana Ring'],
         }
-
-    def add_card(self, card: Card) -> None:
-
-        if card.type == Type.CREATURE:
-            self.card["creatures"].append(card)
-
-        elif card.type == Type.SPELL:
-            self.card["spells"].append(card)
-
-        elif card.type == Type.ARTIFACT:
-            self.card["artifacts"].append(card)
-        
-        else:
-            print("Invalid Type: Artifact, Creature or Spell")
+        self.name = "FantasyCardFactory"
 
     def create_creature(self, name_or_power: str | int
                         | None = None) -> Card:
 
-        cost = randint(1, 4)
-        health = randint(1, 4)
-        attack = randint(1, 4)
-        creature_names = ["Goblin", "Knight", "Archer", "Wizard"]
-
+        cost = randint(1, 10)
+        health = randint(max(1, cost - 2), cost + 2)
+        attack = randint(max(1, cost - 2), cost + 2)
         if isinstance(name_or_power, str):
-            for creature in self.creatures:
-                if creature.name == name_or_power:
-                    return creature
             return CreatureCard(name_or_power, cost,
                                 Rarity.COMMON, attack, health)
 
         elif isinstance(name_or_power, int):
-            return CreatureCard(choice(creature_names), name_or_power,
+            cost = name_or_power
+            health = randint(max(1, cost - 2), cost + 2)
+            attack = randint(max(1, cost - 2), cost + 2)
+            return CreatureCard(choice(self.types["creatures"]), name_or_power,
                                 Rarity.COMMON, attack, health)
 
-        elif not name_or_power:
-            return CreatureCard(choice(creature_names), cost,
+        else:
+            return CreatureCard(choice(self.types["creatures"]), cost,
                                 Rarity.COMMON, attack, health)
 
     def create_spell(self, name_or_power: str | int
                      | None = None) -> Card:
-        cost = randint(1, 4)
-        spell_names = ["Fireball", "Ice Spike", "Flash"]
-
+        cost = randint(1, 10)
+        choosen_effect = choice(list(Effect))
         if isinstance(name_or_power, str):
-            for spell in self.card["spells"]:
-                if spell.name == name_or_power:
-                    return spell
             return SpellCard(name_or_power, cost,
-                             Rarity.COMMON, attack, health)
+                             Rarity.COMMON, choosen_effect.value)
 
         elif isinstance(name_or_power, int):
-            return CreatureCard(choice(creature_names), name_or_power,
-                                Rarity.COMMON, attack, health)
+            return SpellCard(choice(self.types["spells"]), name_or_power,
+                             Rarity.COMMON, choosen_effect.value)
 
-        elif not name_or_power:
-            return CreatureCard(choice(creature_names), cost,
-                                Rarity.COMMON, attack, health)
+        if name_or_power is None:
+            return SpellCard(choice(self.types["spells"]), cost,
+                             Rarity.COMMON, choosen_effect.value)
 
     def create_artifact(self, name_or_power: str | int
                         | None = None) -> Card:
-        pass
+
+        cost = randint(1, 10)
+        effect = ["Permanent: +1 mana per turn"]
+        if isinstance(name_or_power, str):
+            return ArtifactCard(name_or_power, cost,
+                                Rarity.COMMON, cost, choice(effect))
+
+        elif isinstance(name_or_power, int):
+            return ArtifactCard("Mana Ring", name_or_power,
+                                Rarity.COMMON, name_or_power, choice(effect))
+
+        if name_or_power is None:
+            return ArtifactCard("Mana Ring", cost,
+                                Rarity.COMMON, cost, choice(effect))
 
     def create_themed_deck(self, size: int) -> dict:
-        pass
+
+        result = {"deck": []}
+
+        nb_creatures = size // 2
+        nb_artifacts = size // 4
+        nb_spells = size - nb_creatures - nb_artifacts
+
+        for _ in range(nb_creatures):
+            result["deck"].append(self.create_creature())
+
+        for _ in range(nb_artifacts):
+            result["deck"].append(self.create_artifact())
+
+        for _ in range(nb_spells):
+            result["deck"].append(self.create_spell())
+
+        return result
 
     def get_supported_types(self) -> dict:
-        pass
+        return self.types

@@ -8,6 +8,7 @@ class Type(Enum):
     SPELL = "Spell"
     ARTIFACT = "Artifact"
     ELITE = "Elite"
+    PLAYER = "Player"
 
 
 class Rarity(Enum):

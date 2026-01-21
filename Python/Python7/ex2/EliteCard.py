@@ -27,7 +27,7 @@ class EliteCard(Card, Magical, Combatable):
 
     def play(self, game_state: dict) -> dict:
 
-        game_state["card_in"].append(self.get_card_info())
+        game_state["battlefield"].append(self)
         game_state["mana"] -= self.cost
         return {
             "card_played": self.name,

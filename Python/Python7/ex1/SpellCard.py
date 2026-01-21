@@ -18,6 +18,7 @@ class SpellCard(Card):
 
     def play(self, game_state: dict) -> dict:
 
+        game_state["hand"].remove(self)
         game_state["mana"] -= self.cost
         return {
             "card_played": self.name,

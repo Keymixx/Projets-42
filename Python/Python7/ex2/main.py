@@ -13,7 +13,7 @@ kitty_warrior = EliteCard("Kitty Warrior", 6, Rarity.LEGENDARY, 6,
 
 carl = {
     "mana": 6,
-    "card_in": [],
+    "battlefield": [],
     "hand": [],
     "cemetery": [],
     "deck": Deck(),
