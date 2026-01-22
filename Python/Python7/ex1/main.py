@@ -1,11 +1,12 @@
 from ex0.CreatureCard import CreatureCard
-from ex0.Card import Rarity, Type
+from ex0.Card import Rarity
 from ex1 import ArtifactCard, SpellCard, Deck, Effect
 
 print("\n=== DataDeck Deck Builder ===\n")
 
 racoon_warrior = CreatureCard("Racoon Warrior", 4, Rarity.COMMON, 3, 2)
-bowl_of_kibble = ArtifactCard("Bowl of Kibble", 6, Rarity.LEGENDARY, 15, "Feed your pets (+1 health)")
+bowl_of_kibble = ArtifactCard("Bowl of Kibble", 6, Rarity.LEGENDARY,
+                              15, "Feed your pets (+1 health)")
 magic_woof = SpellCard("Magic Woof", 4, Rarity.RARE, Effect.DAMAGE)
 doggo_enchanter = CreatureCard("Doggo Enchanter", 3, Rarity.RARE, 5, 1)
 

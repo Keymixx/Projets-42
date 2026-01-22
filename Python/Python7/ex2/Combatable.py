@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from enum import Enum
 
+
 class CombatType(Enum):
     MELEE = "Melee"
     RANGED = "Ranged"
@@ -9,7 +10,7 @@ class CombatType(Enum):
 
 class Combatable(ABC):
 
-    def __init__(self,attack_point: int, combat_type: CombatType,
+    def __init__(self, attack_point: int, combat_type: CombatType,
                  health: int, defense_point: int,):
         self.attack_point = attack_point
         self.combat_type = combat_type

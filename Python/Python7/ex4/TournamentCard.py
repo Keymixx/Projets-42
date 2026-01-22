@@ -11,7 +11,7 @@ class TournamentCard(Card, Combatable, Rankable):
 
         Card.__init__(self, name, cost, rarity)
         Combatable.__init__(self, attack_point, combat_type,
-                                   defense_point, health)
+                            defense_point, health)
 
         self.id = id
         self.interfaces = [base.__name__ for base in self.__class__.__bases__]
@@ -76,10 +76,9 @@ class TournamentCard(Card, Combatable, Rankable):
         }
 
     def get_combat_stats(self) -> dict:
-        return{
+        return {
             "attack": self.attack_point,
             "defense": self.defense_point,
             "health": self.health,
             "combat_type": self.combat_type
         }
-

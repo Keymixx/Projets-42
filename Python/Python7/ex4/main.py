@@ -9,7 +9,7 @@ print("\n=== DataDeck Tournament Platform ===")
 print("\nRegistering Tournament Cards...\n")
 
 dragon_001 = TournamentCard("Fire Dragon", 5, Rarity.LEGENDARY, 6,
-                            CombatType.MELEE, 10 , 4, "dragon_001",
+                            CombatType.MELEE, 10, 4, "dragon_001",
                             1200)
 print(tournament.register_card(dragon_001))
 

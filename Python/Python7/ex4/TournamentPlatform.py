@@ -5,11 +5,11 @@ import random
 class TournamentPlatform:
 
     def __init__(self):
-        self.leaderboard = []
+        self.leader = []
         self.matches_played = 0
 
     def register_card(self, card: TournamentCard) -> str:
-        self.leaderboard.append(card)
+        self.leader.append(card)
         interfaces = card.interfaces
         registration = f"{card.name} (ID: {card.id})"
         registration += f"- Interfaces: {interfaces}\n"
@@ -22,13 +22,13 @@ class TournamentPlatform:
         card2 = None
         card1 = None
 
-        for card in self.leaderboard:
+        for card in self.leader:
             if card.id == card1_id:
                 card1 = card
 
             elif card.id == card2_id:
                 card2 = card
-        
+
         candidate = [card1, card2]
         random.shuffle(candidate)
         winner = candidate[0]
@@ -39,7 +39,7 @@ class TournamentPlatform:
 
         self.matches_played += 1
 
-        return{
+        return {
             "winner": winner.id,
             "loser": loser.id,
             "winner_rating": winner.rating,
@@ -47,19 +47,22 @@ class TournamentPlatform:
         }
 
     def get_leaderboard(self) -> list:
-        
+
         leaderboard = []
         i = 1
-        for card in sorted(self.leaderboard, key=lambda x: x.rating, reverse=True):
+        for card in sorted(self.leader, key=lambda x: x.rating, reverse=True):
             info = card.get_rank_info()
-            leaderboard.append(f"{i}. {card.name} - Rating: {info["rating"]} ({info["record"]})")
+            record = info["record"]
+            stat = f"{i}. {card.name} - Rating: {card.rating} ({record})"
+            leaderboard.append(stat)
             i += 1
         return leaderboard
 
     def generate_tournament_report(self) -> dict:
-        return{
-            "total_cards": len(self.leaderboard),
+        avg = sum(card.rating for card in self.leader) / len(self.leader)
+        return {
+            "total_cards": len(self.leader),
             "matches_played": self.matches_played,
-            "avg_rating": sum(card.rating for card in self.leaderboard) / len(self.leaderboard),
+            "avg_rating": avg,
             "platform_status": "active"
         }

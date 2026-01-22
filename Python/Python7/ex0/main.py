@@ -7,7 +7,7 @@ def main():
     doggo_enchanter = CreatureCard("Doggo Enchanter", 3, Rarity.RARE, 5, 1)
     player1 = {
         "mana": 6,
-        "card_in": [],
+        "battlefield": [],
         "player_health": 40
     }
 

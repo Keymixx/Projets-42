@@ -12,7 +12,6 @@ class ArtifactCard(Card):
     def play(self, game_state: dict) -> dict:
 
         game_state["battlefield"].append(self)
-        game_state["hand"].remove(self)
         game_state["mana"] -= self.cost
         return {
             "card_played": self.name,
@@ -22,7 +21,6 @@ class ArtifactCard(Card):
 
     def activate_ability(self) -> dict:
         return {"effect": self.effect}
-    
 
     def get_card_info(self) -> dict:
         card_info = super().get_card_info()
@@ -32,4 +30,3 @@ class ArtifactCard(Card):
         card_info["effect"] = self.effect
 
         return card_info
-    

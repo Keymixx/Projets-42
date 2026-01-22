@@ -1,4 +1,4 @@
-from ex0.Card import Card, Rarity, Type
+from ex0.Card import Card, Rarity
 from ex2.Magical import Magical
 from ex2.Combatable import Combatable, CombatType
 
@@ -8,8 +8,9 @@ class EliteCard(Card, Magical, Combatable):
     def __init__(self, name: str, cost: int, rarity: Rarity,
                  attack_point: int, combat_type: CombatType, health: int,
                  defense_point: int, spells: list):
-        super(Card).__init__(name, cost, rarity)
-        super(Combatable).__init__(attack_point, combat_type, defense_point, health)
+        Card.__init__(self, name, cost, rarity)
+        Combatable.__init__(self, attack_point, combat_type,
+                            defense_point, health)
 
         self.spells = spells
         self.still_alive = True
