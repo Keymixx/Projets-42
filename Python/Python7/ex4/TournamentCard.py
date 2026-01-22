@@ -1,26 +1,23 @@
 from ex0.Card import Card, Rarity
-from ex2.Combatable import Combatable
+from ex2.Combatable import Combatable, CombatType
 from ex4.Rankable import Rankable
 
 
 class TournamentCard(Card, Combatable, Rankable):
 
-    def __init__(self, name: str, id: str, cost: int, rarity: Rarity,
-                 attack_point: int, health: int,
-                 defense_point: int, rating: int):
-        super().__init__(name, cost, rarity)
+    def __init__(self, name: str, cost: int, rarity: Rarity,
+                 attack_point: int, combat_type: CombatType, health: int,
+                 defense_point: int, id: str, rating: int):
 
-        self.attack_point = attack_point
-        self.health = health
-        self.defense_point = defense_point
-        self.still_alive = True
+        Card.__init__(self, name, cost, rarity)
+        Combatable.__init__(self, attack_point, combat_type,
+                                   defense_point, health)
+
         self.id = id
-
         self.interfaces = [base.__name__ for base in self.__class__.__bases__]
         self.wins = 0
         self.losses = 0
         self.rating = rating
-        self.record = f"{self.wins}-{self.losses}"
 
     def play(self, game_state: dict) -> dict:
         game_state["battlefield"].append(self)
@@ -54,17 +51,23 @@ class TournamentCard(Card, Combatable, Rankable):
         }
 
     def calculate_rating(self) -> int:
-        for base in self.__class__.__bases__:
-            print(base.__name__)
+        new_rating = self.rating
+        new_rating += (self.wins * 16) + (self.losses * -16)
+        return new_rating
 
     def get_tournament_stats(self) -> dict:
-        pass
+        return {
+            "rating": self.rating,
+            "record": f"{self.wins}-{self.losses}"
+        }
 
     def update_wins(self, wins: int) -> None:
         self.wins += wins
+        self.rating = self.calculate_rating()
 
     def update_losses(self, losses: int) -> None:
         self.losses += losses
+        self.rating = self.calculate_rating()
 
     def get_rank_info(self) -> dict:
         return {
@@ -73,5 +76,10 @@ class TournamentCard(Card, Combatable, Rankable):
         }
 
     def get_combat_stats(self) -> dict:
-        pass
+        return{
+            "attack": self.attack_point,
+            "defense": self.defense_point,
+            "health": self.health,
+            "combat_type": self.combat_type
+        }
 

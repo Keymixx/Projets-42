@@ -1,13 +1,6 @@
 from ex0.Card import Card, Rarity, Type
 from ex2.Magical import Magical
-from ex2.Combatable import Combatable
-from enum import Enum
-
-
-class CombatType(Enum):
-    MELEE = "Melee"
-    RANGED = "Ranged"
-    MAGICAL = "Magical"
+from ex2.Combatable import Combatable, CombatType
 
 
 class EliteCard(Card, Magical, Combatable):
@@ -15,15 +8,11 @@ class EliteCard(Card, Magical, Combatable):
     def __init__(self, name: str, cost: int, rarity: Rarity,
                  attack_point: int, combat_type: CombatType, health: int,
                  defense_point: int, spells: list):
-        super().__init__(name, cost, rarity)
+        super(Card).__init__(name, cost, rarity)
+        super(Combatable).__init__(attack_point, combat_type, defense_point, health)
 
-        self.attack_point = attack_point
-        self.combat_type = combat_type
-        self.health = health
-        self.defense_point = defense_point
         self.spells = spells
         self.still_alive = True
-        self.type = Type.ELITE
 
     def play(self, game_state: dict) -> dict:
 
