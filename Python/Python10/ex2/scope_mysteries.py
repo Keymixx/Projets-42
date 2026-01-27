@@ -43,18 +43,26 @@ def memory_vault() -> dict[str, callable]:
     }
 
 
-counter = mage_counter()
-print(counter())
+def main():
+    counter = mage_counter()
+    print(counter())
 
-accumulator = spell_accumulator(5)
-print(accumulator(5))
+    accumulator = spell_accumulator(5)
+    print(accumulator(5))
 
-frozen_factory = enchantment_factory("Frozen")
-print(frozen_factory("Sword"))
-print(frozen_factory("Ring"))
+    frozen_factory = enchantment_factory("Frozen")
+    print(frozen_factory("Sword"))
+    print(frozen_factory("Ring"))
 
-memory_vault = memory_vault()
-memory_vault["store"]("name", "Carl")
-memory_vault["store"]("age", "24")
-print(memory_vault["recall"]("name"))
-print(memory_vault["recall"]("weight"))
+    vault = memory_vault()
+    vault["store"]("name", "Carl")
+    vault["store"]("age", "24")
+    print(vault["recall"]("name"))
+    print(vault["recall"]("weight"))
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        print(e)
