@@ -75,5 +75,3 @@ new_spells = spell_transformer(spells)
 print("\n\nSpells list after function :")
 for spell in new_spells:
     print(spell)
-
-
