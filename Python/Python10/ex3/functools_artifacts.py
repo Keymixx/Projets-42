@@ -65,36 +65,44 @@ def enchantement(power: int, element: str, target: str):
     return f"{element} enchantment ({power} power) applied to {target}"
 
 
-spell_powers = [30, 33, 39, 49, 20, 25]
+def main():
+    spell_powers = [30, 33, 39, 49, 20, 25]
 
-print("\nTesting spell reducer...")
-print(f'Sum: {spell_reducer(spell_powers, "add")}')
-print(f'Product: {spell_reducer(spell_powers, "multiply")}')
-print(f'Max: {spell_reducer(spell_powers, "max")}')
-print(f'Min: {spell_reducer(spell_powers, "min")}')
+    print("\nTesting spell reducer...")
+    print(f'Sum: {spell_reducer(spell_powers, "add")}')
+    print(f'Product: {spell_reducer(spell_powers, "multiply")}')
+    print(f'Max: {spell_reducer(spell_powers, "max")}')
+    print(f'Min: {spell_reducer(spell_powers, "min")}')
 
-print("\n\nTesting partial enchanter...")
-enchantement_table = partial_enchanter(enchantement)
-print(f'Fire enchant sword: {enchantement_table["fire_enchant"]("Sword")}')
+    print("\n\nTesting partial enchanter...")
+    enchantement_table = partial_enchanter(enchantement)
+    print(f'Fire enchant sword: {enchantement_table["fire_enchant"]("Sword")}')
 
-print("\n\nTesting memoized fibonacci...")
-begin = time()
-print(f"Fibonnaci(30): {memoized_fibonacci(30)}")
-end = time()
-print(f"With lru_cache: {end - begin:.5f}")
+    print("\n\nTesting memoized fibonacci...")
+    begin = time()
+    print(f"Fibonnaci(30): {memoized_fibonacci(30)}")
+    end = time()
+    print(f"With lru_cache: {end - begin:.5f}")
 
-begin = time()
-print(f"\nFibonnaci(30): {fibonacci(30)}")
-end = time()
-print(f"Without lru_cache: {end - begin:.5f}")
+    begin = time()
+    print(f"\nFibonnaci(30): {fibonacci(30)}")
+    end = time()
+    print(f"Without lru_cache: {end - begin:.5f}")
 
-print("\n\nTesting spell_dispatcher..")
-distpatcher = spell_dispatcher()
-print("Test with List:")
-print(distpatcher(spell_powers))
+    print("\n\nTesting spell_dispatcher..")
+    distpatcher = spell_dispatcher()
+    print("Test with List:")
+    print(distpatcher(spell_powers))
 
-print("Test with Int:")
-print(distpatcher(45))
+    print("Test with Int:")
+    print(distpatcher(45))
 
-print("\nTest with String:")
-print(distpatcher("Fire"))
+    print("\nTest with String:")
+    print(distpatcher("Fire"))
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        print(e)

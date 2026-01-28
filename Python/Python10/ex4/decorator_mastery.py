@@ -7,7 +7,7 @@ def spell_timer(func: callable) -> callable:
 
     @wraps(func)
     def wrapper(*args, **kwargs) -> Any:
-        print(f"Casting: {func.__name__}")
+        print(f"Casting: {func.__name__}...")
         start_time = time()
         result = func(*args, **kwargs)
         end_time = time()
@@ -40,7 +40,7 @@ def retry_spell(max_attempts: int) -> callable:
                     return func(*args, **kwargs)
                 except Exception:
                     if i == max_attempts:
-                        return "Spell casting failed after max_attempts"
+                        return f"Spell casting failed after {max_attempts} try"
                     print("Spell failed, retrying... ", end="")
                     print(f"attempts {i + 1}/{max_attempts})")
         return wrapper
@@ -57,33 +57,42 @@ class MageGuild:
         return (f"Successfully cast {spell_name} with {power} power")
 
 
-def lazy_spell(spell: str):
+@spell_timer
+def fireball() -> str:
     sleep(2)
-    return f"{spell} cast!"
+    return "Fireball cast!"
 
 
 @power_validator(70)
-def cast_spell(spell: str, power: 60):
+def cast_spell(spell: str, power: int) -> str:
     return f"{spell} of {power} power cast!"
 
 
 @retry_spell(5)
-def broken_spell():
+def broken_spell() -> str:
     raise ValueError("ERROR")
 
 
-print("Testing spell timer...")
-print(lazy_spell("Ice Spike"))
+def main():
+    print("\nTesting spell timer...")
+    print(f"Result: {fireball()}")
 
-print("\nTesting power validator...")
-print(f"Result: {cast_spell("Fireball", 50)}\n")
+    print("\nTesting power validator...")
+    print(f"Result: {cast_spell("Fireball", 50)}\n")
 
-print("\nTesting retry spell...")
-print(broken_spell())
+    print("\nTesting retry spell...")
+    print(broken_spell())
 
-print("\nTesting mage guild...")
-guild = MageGuild()
-name = "Alex123"
-power = 5
-print(f"{name} validate ?: {guild.validate_mage_name(name)}")
-print(f"Try to cast with {power} of power: {guild.cast_spell(5, "shield")}")
+    print("\nTesting mage guild...")
+    guild = MageGuild()
+    name = "Alex123"
+    power = 5
+    print(f"{name} validate ?: {guild.validate_mage_name(name)}")
+    print(f"Try to cast with {power} of power: {guild.cast_spell(5, "fire")}")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        print(e)
