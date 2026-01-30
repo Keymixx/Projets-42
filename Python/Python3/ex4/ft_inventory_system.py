@@ -1,5 +1,5 @@
-def print_inventory(inventory: dict)-> None:
-    
+def print_inventory(inventory: dict) -> None:
+
     total_categorie = {
         "weapon": 0,
         "armor": 0,
@@ -10,13 +10,12 @@ def print_inventory(inventory: dict)-> None:
     total_value = 0
     print("=== Carl's Inventory ===")
     for item in inventory:
-        
-        
+
         categorie = inventory[item].get("categorie")
         rarity = inventory[item].get("rarity")
         quantities = inventory[item].get("quantities")
         value = inventory[item].get("value")
-        
+
         total_categorie[categorie] += quantities
         total_item += quantities
         total_value += quantities * value
@@ -30,41 +29,79 @@ def print_inventory(inventory: dict)-> None:
 
     print(f"\nInventory value: {total_value} gold")
     print(f"Item count: {total_item} items")
-    print(f"Categories: weapon({weapon}), consumable({consumable}), armor({armor})")
+    print(f"Categories: weapon({weapon}), consumable({consumable})", end="")
+    print(f", armor({armor})")
 
 
+def transaction(giver: dict, receiver: dict,
+                quantities: int, item: str) -> None:
 
-
-def transaction(giver, receiver, quantities, item)-> None:
-    
-    print(f"== Transaction: {giver["name"]} gives {receiver["name"]} {quantities} {item} ===")
-    
-    if item not in giver["inventory"].keys():
-        print(f"Sorry {receiver["name"]}...")
-        print(f"{giver["name"]} doesn't have anything called '{item}' inside is backpack.....'")
+    if item not in giver.keys():
+        print(f"Missing ({item}) in inventory")
         return
 
-    actual_quantities = giver["inventory"][item]["quantities"]
+    actual_quantities = giver[item]["quantities"]
     if actual_quantities < quantities:
-        print(f"Sorry {receiver["name"]}...")
-        print(f"{giver["name"]} had only {actual_quantities} {item} but you want {quantities} {item}....")
+        print(f"Not enough ({item}) in inventory....", end="")
+        print(f"you have {actual_quantities} {item}")
         return
 
-    giver["inventory"][item]["quantities"] -= quantities
-    
-    if item not in receiver["inventory"].keys():
-        receiver["inventory"].update({item: quantities})
-    
+    giver[item]["quantities"] -= quantities
+
+    if item not in receiver.keys():
+        receiver.update({item: giver[item]})
+        receiver[item]["quantities"] = quantities
     else:
-        receiver["inventory"][item]["quantities"] += quantities
-    
-    print(receiver["inventory"][item]["quantities"])
+        receiver[item]["quantities"] += quantities
+
     print("Transaction successful!")
-    print("=== Updated Inventories ===")
-    print(f"{giver["name"]} potions: {giver["inventory"][item]["quantities"]}")
-    # print(f"{receiver["name"]} {item}: {receiver["inventory"][item]["quantities"]}")
+
+
+def most_valuable_player(all_players: list) -> None:
+
+    most_valuable = None
+    best_value = 0
+    for player, inventory in all_players.items():
+        player_value = 0
+        for item in inventory:
+            quantities = inventory[item].get("quantities")
+            value = inventory[item].get("value")
+            player_value += quantities * value
+            if best_value < player_value:
+                most_valuable = player
+                best_value = player_value
+
+    print(f"Most valuable player: {most_valuable} ({best_value} gold)")
+
+
+def most_item_player(all_player: list) -> None:
+
+    most_item_player = None
+    most_item = 0
+    for player, inventory in all_players.items():
+        player_item = 0
+        for item in inventory:
+            quantities = inventory[item].get("quantities")
+            player_item += quantities
+            if most_item < player_item:
+                most_item_player = player
+                most_item = player_item
+
+    print(f"Most items: {most_item_player} ({most_item} items)")
+
+
+def rarest_item(all_player) -> None:
+
+    rare_items = []
+    for inventory in all_players.values():
+        for item in inventory:
+            if inventory[item]["rarity"] == "rare":
+                rare_items.append(item)
+
+    print(f"Rarest items: {rare_items}")
 
 # =====ITEMS=====
+
 
 sword = {
     "categorie": "weapon",
@@ -99,20 +136,30 @@ elytra = {
 }
 
 # =====INVENTORY=====
+
 carl = {
-    "name": "Carl",
-    "inventory": {
-        "sword": sword,
-        "shield": shield,
-        "potions": potions,
-        "elytra": elytra
-    }
+    "sword": sword,
+    "shield": shield,
+    "potions": potions,
+    "elytra": elytra
+}
+yannis = {}
+
+all_players = {
+    "Carl": carl,
+    "Yannis": yannis
 }
 
-yannis = {
-    "name": "Yannis",
-    "inventory": {}
-}
+print_inventory(carl)
 
-print_inventory(carl["inventory"])
+print("\n== Transaction: Carl gives Yannis 2 potions ===")
 transaction(carl, yannis, 2, "potions")
+
+print("\n=== Updated Inventories ===")
+print(f"Carl potions: {carl['potions']['quantities']}")
+print(f"Yannis potions: {yannis['potions']['quantities']}")
+
+print("\n=== Inventory Analytics ===")
+most_valuable_player(all_players)
+most_item_player(all_players)
+rarest_item(all_players)

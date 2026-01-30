@@ -1,17 +1,20 @@
 def water_plants(plant_list):
+    """Waters all plants in the list and handles errors."""
+
     print("Opening watering system")
     try:
         for plant in plant_list:
             if plant == "":
-                1 / 0
+                raise ("Cannot water None - invalid plant!")
             print(f"Watering {plant}")
-    except ZeroDivisionError:  # Flake8
-        print("Error: Cannot water None - invalid plant!")
+    except Exception as error:  # Flake8
+        print(f"Error: {error}")
     finally:
         print("Closing watering system (cleanup)")
 
 
 def test_watering_system():
+    """Tests the watering system with valid and invalid plant lists."""
 
     print("=== Garden Watering System ===\n")
     print("Testing normal watering...")

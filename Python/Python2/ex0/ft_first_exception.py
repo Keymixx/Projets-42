@@ -1,4 +1,5 @@
 def check_temperature(temp_str):
+    """Check if a temperature string is valid and suitable for plants."""
     try:
         temp = int(temp_str)
         if temp > 0 and temp < 40:
@@ -9,12 +10,13 @@ def check_temperature(temp_str):
         else:
             print(f"Error: {temp}°C is too cold for plants (min 0°C)")
         return None
-    except Exception:  # Flake8
+    except ValueError:  # Flake8
         print(f"Error: '{temp_str}' is not a valid number")
         return None
 
 
 def test_temperature_input():
+    """Test the temperature checker with various inputs."""
     print("=== Garden Temperature Checker ===")
 
     print("\nTesting temperature: 25")

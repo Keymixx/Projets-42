@@ -1,27 +1,32 @@
 class GardenError(Exception):
+    """Base exception for garden-related errors."""
     def __init__(self, message):
         super().__init__(message)
 
 
 class PlantError(GardenError):
+    """Exception for plant-specific errors."""
     def __init__(self, message):
         super().__init__(message)
 
 
 class WaterError(GardenError):
+    """Exception for plant-specific errors."""
     def __init__(self, water, water_required):
         error = f"Not enough water in the tank! {water}/{water_required}L"
         super().__init__(error)
 
 
 class Plant:
-    def __init__(self, name, water, sun):
+    """Represents a plant with water and sun requirements."""
+    def __init__(self, name: str, water: int, sun: int):
         self.name = name
         self.water = water
         self.sun = sun
 
 
 class GardenManager:
+    """Manages plants and water resources in the garden."""
     def __init__(self, water_tank):
         self.plants = []
         self.water_tank = water_tank
@@ -29,6 +34,7 @@ class GardenManager:
         self.water_max = 150
 
     def add_plants(self, plants):
+        """Adds a list of plants to the garden."""
         try:
             for plant in plants:
                 if plant.name == "":
@@ -39,17 +45,19 @@ class GardenManager:
             print(f"Error adding plant: {error}")
 
     def water_plants(self):
+        """Waters all plants in the garden."""
         print("Opening watering system")
         try:
             for plant in self.plants:
                 plant.water += 1
                 print(f"Watering {plant.name} - success")
-        # except :
-        #     print("Something goes wrong")
+        except Exception:
+            print("Something goes wrong")
         finally:
             print("Closing watering system (cleanup)")
 
     def check_plants_health(self):
+        """Checks the health status of all plants."""
         for plant in self.plants:
             try:
                 if plant.water < 1:
@@ -67,6 +75,7 @@ class GardenManager:
                 print(f"Error checking: {error}")
 
     def check_water_tank(self):
+        """Checks if the water tank has sufficient water."""
         try:
             if self.water_tank < self.water_required:
                 raise WaterError(self.water_tank, self.water_required)
@@ -74,6 +83,7 @@ class GardenManager:
             print(f"Error checking water tank: {error}")
 
     def fill_water_tank(self, fill_water):
+        """Fills the water tank with the specified amount."""
         try:
             water = fill_water + self.water_tank
             if water > self.water_max:

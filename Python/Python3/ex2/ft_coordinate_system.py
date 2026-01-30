@@ -1,15 +1,18 @@
 import sys
 import math
 
-def calcul_distance(first_coord: tuple, second_coord: tuple) -> int: 
+
+def calcul_distance(first_coord: tuple, second_coord: tuple) -> int:
     x1, y1, z1 = first_coord
     x2, y2, z2 = second_coord
     return math.sqrt((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2)
+
 
 def one_arg():
     print('Invalid number of args. ')
     print('Usage: python3 ft_coordinate_system.py <x> <y> <z> or "x,y,z"...')
     quit()
+
 
 def two_args(args: list) -> tuple:
     coord = args[1].split(",")
@@ -25,14 +28,15 @@ def two_args(args: list) -> tuple:
             i += 1
     except ValueError:
         print(f"Parsing invalid coordinates: {args}")
-        print("Error parsing coordinates: invalid literal" \
-        f"for int() with base 10: '{coord[i]}'")
-        print(f"Error details - Type: ValueError, Args:" \
-        f"('invalid literal for int() with base 10:' '{coord[i]}'")
+        print("Error parsing coordinates: invalid literal", end="")
+        print(f"for int() with base 10: '{coord[i]}'")
+        print("Error details - Type: ValueError, Args:", end="")
+        print(f"('invalid literal for int() with base 10:' '{coord[i]}'")
         quit()
-    
+
     coord = tuple(coord)
     return coord
+
 
 def four_args(args: list) -> tuple:
     i = 1
@@ -40,12 +44,12 @@ def four_args(args: list) -> tuple:
         while i < len_args:
             args[i] = int(args[i])
             i += 1
-    except:
+    except TypeError:
         print(f"Parsing invalid coordinates: {args}")
-        print("Error parsing coordinates: invalid literal" \
-        f"for int() with base 10: '{sys.argv[i]}'")
-        print("Error details - Type: ValueError, Args:" \
-        f"('invalid literal for int() with base 10:' '{sys.argv[i]}'")
+        print("Error parsing coordinates: invalid literal", end="")
+        print(f"for int() with base 10: '{sys.argv[i]}'")
+        print("Error details - Type: ValueError, Args:", end="")
+        print(f"('invalid literal for int() with base 10:' '{sys.argv[i]}'")
         quit()
 
     coord = tuple(sys.argv[1:])

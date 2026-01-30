@@ -1,5 +1,5 @@
 print("=== CYBER ARCHIVES - DATA RECOVERY SYSTEM ===\n")
-print("Accessing Storage Vault: ancient_fragment.txt")
+print("Accessing Storage Vault: ancient\_fragment.txt")
 
 
 f = open("ancient_fragment.txt", "r")

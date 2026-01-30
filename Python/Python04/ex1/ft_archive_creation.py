@@ -3,7 +3,7 @@ print("Initializing new storage unit: new_discovery.txt")
 
 
 f = open("new_discovery.txt", "w")
-print("Storage unit created successfully...\n")
+print("Connection established...\n")
 print("Inscribing preservation data...")
 
 print("{[}ENTRY 001{]} New quantum algorithm discovered")
@@ -15,4 +15,3 @@ f.write("{[}ENTRY 003{]} Archived by Data Archivist trainee\n")
 
 f.close()
 print("\nData recovery complete. Storage unit disconnected.")
-print("Archive 'new_discovery.txt' ready for long-term preservation.")

@@ -2,8 +2,8 @@ print("=== Achievement Tracker System ===\n")
 
 achievements = {
     "first_kill",
-    "level_10!", 
-    "treasure_hunter", 
+    "level_10!",
+    "treasure_hunter",
     "speed_demon",
     "boss_slayer",
     "collector",
@@ -17,12 +17,12 @@ achievements = {
 carl = {"first_kill", "level_10!", "boss_slayer", "fizzbuzz", "speed_demon"}
 yannis = {"first_kill", "treasure_hunter", "perfectionist", "fizzbuzz"}
 felix = {"first_kill", "level_10!", "speed_demon", "fizzbuzz", "perfectionist"}
-owel = {"fizzbuzz", "golem"}
+Hoel = {"fizzbuzz", "golem"}
 
-players = [carl, owel, yannis, felix]
+players = [carl, Hoel, yannis, felix]
 
 print(f"Player carl achievements: {carl}")
-print(f"Player owel achievements: {owel}")
+print(f"Player Hoel achievements: {Hoel}")
 print(f"Player yannis achievements: {yannis}")
 print(f"Player felix achievements: {felix}")
 
@@ -31,10 +31,8 @@ print("\n=== Achievement Analytics ===")
 
 i = 0
 total_achievement = set()
-while i < len(players) - 1:
-    temp = players[i].union(players[i + 1])
-    total_achievement = total_achievement.union(temp)
-    i += 1
+for achievements in players:
+    total_achievement.update(achievements)
 print(f"All unique achievement discoverd: {total_achievement}")
 print(f"Total unique achievement discoverd: {len(total_achievement)}")
 
@@ -45,7 +43,7 @@ while i < len(players) - 1:
 print(f"Common to all players: {commun_achievment}")
 
 rare_achievement = set()
-for achievement in achievements:
+for achievement in total_achievement:
     count = 0
     for player in players:
         if achievement in player:
@@ -55,6 +53,6 @@ for achievement in achievements:
 
 print(f"Rare achievements (1 player): {rare_achievement}")
 print()
-print(f"Carl vs Owel common: {carl.intersection(owel)}")
-print(f"Carl unique: {carl.difference(owel)}")
-print(f"Owel unique: {owel.difference(carl)}")
+print(f"Carl vs Hoel common: {carl.intersection(Hoel)}")
+print(f"Carl unique: {carl.difference(Hoel)}")
+print(f"Hoel unique: {Hoel.difference(carl)}")
