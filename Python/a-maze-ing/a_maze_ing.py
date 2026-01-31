@@ -9,6 +9,8 @@ class Cell:
             "S": False,
             "W": False
         }
+        self.is_42 = False
+
         self.y = y
         self.x = x
 
@@ -33,6 +35,30 @@ class MazePrimGenerator:
                 row.append(Cell(y, x))
             col.append(row)
         self.grid = col
+        self.init_42()
+
+    def init_42(self) -> None:
+        x: int = self.lenght // 2
+        y: int = self.height // 2
+
+        self.grid[y][x - 1].is_42 = True
+        self.grid[y + 1][x - 1].is_42 = True
+        self.grid[y + 2][x - 1].is_42 = True
+        self.grid[y][x - 2].is_42 = True
+        self.grid[y][x - 3].is_42 = True
+        self.grid[y - 1][x - 3].is_42 = True
+        self.grid[y - 2][x - 3].is_42 = True
+        self.grid[y][x + 1].is_42 = True
+        self.grid[y + 1][x + 1].is_42 = True
+        self.grid[y + 2][x + 1].is_42 = True
+        self.grid[y - 2][x + 1].is_42 = True
+        self.grid[y][x + 2].is_42 = True
+        self.grid[y + 2][x + 2].is_42 = True
+        self.grid[y - 2][x + 2].is_42 = True
+        self.grid[y - 2][x + 3].is_42 = True
+        self.grid[y - 1][x + 3].is_42 = True
+        self.grid[y][x + 3].is_42 = True
+        self.grid[y + 2][x + 3].is_42 = True
 
     def print_line(self, y: int) -> None:
         for x in range(self.lenght):
@@ -71,29 +97,35 @@ class MazePrimGenerator:
         y = cell.y
         x = cell.x
 
-        if x > 0:
+        if x > 0 and not self.grid[y][x - 1].is_42:
             cell.neighbours.add(self.grid[y][x - 1])
-        if x < self.lenght - 1:
+        if x < self.lenght - 1 and not self.grid[y][x + 1].is_42:
             cell.neighbours.add(self.grid[y][x + 1])
-        if y > 0:
+        if y > 0 and not self.grid[y - 1][x].is_42:
             cell.neighbours.add(self.grid[y - 1][x])
-        if y < self.height - 1:
+        if y < self.height - 1 and not self.grid[y + 1][x].is_42:
             cell.neighbours.add(self.grid[y + 1][x])
+
+    def is_valid_frontier(self, cell: Cell):
+        if cell.unvisited and not cell.is_42:
+            return True
+        else:
+            return False
 
     def add_frontiers(self, cell: Cell):
         y = cell.y
         x = cell.x
 
-        if x > 0 and self.grid[y][x - 1].unvisited:
+        if x > 0 and self.is_valid_frontier(self.grid[y][x - 1]):
             self.frontiers.add(self.grid[y][x - 1])
 
-        if x < self.lenght - 1 and self.grid[y][x + 1].unvisited:
+        if x < self.lenght - 1 and self.is_valid_frontier(self.grid[y][x + 1]):
             self.frontiers.add(self.grid[y][x + 1])
 
-        if y > 0 and self.grid[y - 1][x].unvisited:
+        if y > 0 and self.is_valid_frontier(self.grid[y - 1][x]):
             self.frontiers.add(self.grid[y - 1][x])
 
-        if y < self.height - 1 and self.grid[y + 1][x].unvisited:
+        if y < self.height - 1 and self.is_valid_frontier(self.grid[y + 1][x]):
             self.frontiers.add(self.grid[y + 1][x])
 
     def break_frontier(self, cell: Cell):
