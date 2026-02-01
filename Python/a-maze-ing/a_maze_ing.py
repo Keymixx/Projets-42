@@ -1,5 +1,10 @@
+import os
 import random
+import time
 
+
+def red() -> str:
+    return "\033[48;5;15m \033[0m\033[48;5;15m \033[0m"
 
 class Cell:
     def __init__(self, y: int, x: int):
@@ -26,12 +31,14 @@ class MazePrimGenerator:
         self.grid = list[list[Cell]]
         self.visited = set()
         self.frontiers = set()
+        self.number = set()
 
     def maze_init(self) -> None:
         col = []
         for y in range(self.height):
             row = []
             for x in range(self.lenght):
+                cell = Cell(y, x)
                 row.append(Cell(y, x))
             col.append(row)
         self.grid = col
@@ -64,34 +71,43 @@ class MazePrimGenerator:
         for x in range(self.lenght):
             cell: Cell = self.grid[y][x]
             if x == 0:
-                print("+", end="")
+                print("╠", end="")
             if not cell.wall["N"]:
-                print("--+", end="")
+                if x == self.lenght - 1:
+                    print("──╢", end="")
+                else:
+                    print("──┤", end="")
             else:
-                print("  +", end="")
+                if x == self.lenght - 1:
+                    print("  ╢", end="")
+                else:
+                    print("  ┼", end="")
 
     def print_col(self, y: int) -> None:
         for x in range(self.lenght):
             cell: Cell = self.grid[y][x]
-            if x == 0:
-                print("|  ", end="")
+            if cell.is_42:
+                print(f"│{red()}", end="")
+
+            elif x == 0:
+                print("║  ", end="")
             elif not cell.wall["W"]:
-                print("|  ", end="")
+                print("│  ", end="")
             elif cell.wall["W"]:
                 print("   ", end="")
             if x == self.lenght - 1:
-                print("|", end="")
+                print("║", end="")
 
     def print_maze(self) -> None:
         for y in range(self.height):
             if y == 0:
-                print(f"+{'--+' * self.lenght}", end="")
+                print(f"╔{'══╤' * (self.lenght - 1)}══╗", end="")
             else:
                 self.print_line(y)
             print()
             self.print_col(y)
             print()
-        print(f"+{'--+' * self.lenght}")
+        print(f"╚{'══╧' * (self.lenght - 1)}══╝")
 
     def add_neighbours(self, cell: Cell):
         y = cell.y
@@ -152,7 +168,12 @@ class MazePrimGenerator:
         x_start: int = random.randint(0, self.lenght - 1)
         y_start: int = random.randint(0, self.height - 1)
 
+        while self.grid[y_start][x_start].is_42:
+            x_start: int = random.randint(0, self.lenght - 1)
+            y_start: int = random.randint(0, self.height - 1)
+
         cell = self.grid[y_start][x_start]
+
         print(f"y = {y_start}   x = {x_start}")
         cell.unvisited = False
         self.visited.add(cell)
@@ -167,3 +188,7 @@ class MazePrimGenerator:
             self.add_neighbours(cell)
             self.add_frontiers(cell)
             self.break_frontier(cell)
+            os.system("clear")
+            self.print_maze()
+            time.sleep(0.009)
+
