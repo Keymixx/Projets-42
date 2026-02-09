@@ -1,0 +1,25 @@
+[project]
+name = "mazegen-pc"
+version = "1.0.0"
+description = "Maze Generator"
+authors = [
+    {name = "caaubert"},
+    {name = "psok-on"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "colorama",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include = ["mazegen"]
+
+[tool.mypy]
+[[tool.mypy.overrides]]
+module = "mazegen.*"
+ignore_missing_imports = true

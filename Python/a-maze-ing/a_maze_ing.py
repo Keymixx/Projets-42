@@ -1,194 +1,143 @@
+from mazegen import MazeGenerator
+from solver import Solver
+from output_maze import output_maze
+from config_parse import config
 import os
-import random
-import time
+import sys
 
 
-def red() -> str:
-    return "\033[48;5;15m \033[0m\033[48;5;15m \033[0m"
+def print_instructions(map: MazeGenerator) -> None:
+    """Display the interactive menu and current algorithm status.
 
-class Cell:
-    def __init__(self, y: int, x: int):
-        self.wall = {
-            "N": False,
-            "E": False,
-            "S": False,
-            "W": False
-        }
-        self.is_42 = False
+    Args:
+        map (MazeGenerator): The current maze generator instance to
+            access the algorithm name and color settings.
+    """
 
-        self.y = y
-        self.x = x
+    if map.width - 1 < 8 or map.height - 1 < 6:
+        print("Labyrinth too small for display 42")
+    print(f"\n=== {map.maze_name[map.index_name]} ===")
+    print("\n=== A-Maze-ing ===")
+    print("1. Re-generate a new maze")
+    print("2. Show/Hide path from entry to exit")
+    print("3. Rotate maze colors")
+    print("4. Switch maze algo")
+    print("5. Quit")
 
-        self.neighbours = set()
-        self.unvisited = True
 
+def main() -> None:
+    """Execute the main program loop for the maze generator and solver.
 
-class MazePrimGenerator:
-    def __init__(self, lenght: int, height: int):
-        self.lenght = lenght + 1
-        self.height = height + 1
+    This function handles the configuration loading, initializes the maze
+    objects, and manages the interactive user input for re-generation,
+    solving, and visualization.
 
-        self.grid = list[list[Cell]]
-        self.visited = set()
-        self.frontiers = set()
-        self.number = set()
+    Raises:
+        ValueError: If arguments are invalid, config file is missing,
+            or user input is out of range.
+    """
+    try:
 
-    def maze_init(self) -> None:
-        col = []
-        for y in range(self.height):
-            row = []
-            for x in range(self.lenght):
-                cell = Cell(y, x)
-                row.append(Cell(y, x))
-            col.append(row)
-        self.grid = col
-        self.init_42()
+        if len(sys.argv) != 2:
+            raise ValueError("Number of arguments must be equal at 2!")
+        if not sys.argv[1] == "config.txt":
+            raise ValueError(f"{sys.argv[1]}, Not equal at config.txt!")
+        maze_infos = config(sys.argv[1])
+        if not maze_infos:
+            raise ValueError("Missing maze_infos!")
 
-    def init_42(self) -> None:
-        x: int = self.lenght // 2
-        y: int = self.height // 2
-
-        self.grid[y][x - 1].is_42 = True
-        self.grid[y + 1][x - 1].is_42 = True
-        self.grid[y + 2][x - 1].is_42 = True
-        self.grid[y][x - 2].is_42 = True
-        self.grid[y][x - 3].is_42 = True
-        self.grid[y - 1][x - 3].is_42 = True
-        self.grid[y - 2][x - 3].is_42 = True
-        self.grid[y][x + 1].is_42 = True
-        self.grid[y + 1][x + 1].is_42 = True
-        self.grid[y + 2][x + 1].is_42 = True
-        self.grid[y - 2][x + 1].is_42 = True
-        self.grid[y][x + 2].is_42 = True
-        self.grid[y + 2][x + 2].is_42 = True
-        self.grid[y - 2][x + 2].is_42 = True
-        self.grid[y - 2][x + 3].is_42 = True
-        self.grid[y - 1][x + 3].is_42 = True
-        self.grid[y][x + 3].is_42 = True
-        self.grid[y + 2][x + 3].is_42 = True
-
-    def print_line(self, y: int) -> None:
-        for x in range(self.lenght):
-            cell: Cell = self.grid[y][x]
-            if x == 0:
-                print("╠", end="")
-            if not cell.wall["N"]:
-                if x == self.lenght - 1:
-                    print("──╢", end="")
-                else:
-                    print("──┤", end="")
-            else:
-                if x == self.lenght - 1:
-                    print("  ╢", end="")
-                else:
-                    print("  ┼", end="")
-
-    def print_col(self, y: int) -> None:
-        for x in range(self.lenght):
-            cell: Cell = self.grid[y][x]
-            if cell.is_42:
-                print(f"│{red()}", end="")
-
-            elif x == 0:
-                print("║  ", end="")
-            elif not cell.wall["W"]:
-                print("│  ", end="")
-            elif cell.wall["W"]:
-                print("   ", end="")
-            if x == self.lenght - 1:
-                print("║", end="")
-
-    def print_maze(self) -> None:
-        for y in range(self.height):
-            if y == 0:
-                print(f"╔{'══╤' * (self.lenght - 1)}══╗", end="")
-            else:
-                self.print_line(y)
-            print()
-            self.print_col(y)
-            print()
-        print(f"╚{'══╧' * (self.lenght - 1)}══╝")
-
-    def add_neighbours(self, cell: Cell):
-        y = cell.y
-        x = cell.x
-
-        if x > 0 and not self.grid[y][x - 1].is_42:
-            cell.neighbours.add(self.grid[y][x - 1])
-        if x < self.lenght - 1 and not self.grid[y][x + 1].is_42:
-            cell.neighbours.add(self.grid[y][x + 1])
-        if y > 0 and not self.grid[y - 1][x].is_42:
-            cell.neighbours.add(self.grid[y - 1][x])
-        if y < self.height - 1 and not self.grid[y + 1][x].is_42:
-            cell.neighbours.add(self.grid[y + 1][x])
-
-    def is_valid_frontier(self, cell: Cell):
-        if cell.unvisited and not cell.is_42:
-            return True
+        width = maze_infos["WIDTH"]
+        height = maze_infos["HEIGHT"]
+        entry_y, entry_x = maze_infos["ENTRY"]
+        exit_y, exit_x = maze_infos["EXIT"]
+        maze_txt = maze_infos["OUTPUT_FILE"]
+        is_perfect = maze_infos["PERFECT"]
+        if "SEED" in maze_infos:
+            seed = maze_infos["SEED"]
         else:
-            return False
+            seed = None
 
-    def add_frontiers(self, cell: Cell):
-        y = cell.y
-        x = cell.x
+        map = MazeGenerator(width, height, seed)
+        init_map = map.maze_init()
+        if init_map[entry_y][entry_x].is_42:
+            raise ValueError("Entry is a 42 cell")
+        if init_map[exit_y][exit_x].is_42:
+            raise ValueError("Exit is a 42 cell")
 
-        if x > 0 and self.is_valid_frontier(self.grid[y][x - 1]):
-            self.frontiers.add(self.grid[y][x - 1])
+        maze = map.mazes[map.index_maze]()
 
-        if x < self.lenght - 1 and self.is_valid_frontier(self.grid[y][x + 1]):
-            self.frontiers.add(self.grid[y][x + 1])
+        if not is_perfect:
+            maze = map.unperfect(maze)
+        solver = Solver()
 
-        if y > 0 and self.is_valid_frontier(self.grid[y - 1][x]):
-            self.frontiers.add(self.grid[y - 1][x])
+        running, show_hide_path, solving = True, False, False
+        access = True
 
-        if y < self.height - 1 and self.is_valid_frontier(self.grid[y + 1][x]):
-            self.frontiers.add(self.grid[y + 1][x])
-
-    def break_frontier(self, cell: Cell):
-        frontier = random.choice(list(self.visited & cell.neighbours))
-        if frontier.x != cell.x:
-            if frontier.x > cell.x:  # if frontier = x + 1
-                cell.wall["E"] = True
-                frontier.wall["W"] = True
-
-            elif frontier.x < cell.x:  # if frontier = x - 1
-                cell.wall["W"] = True
-                frontier.wall["E"] = True
-
-        elif frontier.y != cell.y:
-            if frontier.y > cell.y:  # if frontier = y + 1
-                cell.wall["S"] = True
-                frontier.wall["N"] = True
-
-            elif frontier.y < cell.y:  # if frontier = y - 1
-                cell.wall["N"] = True
-                frontier.wall["S"] = True
-
-    def prim_generator(self):
-        x_start: int = random.randint(0, self.lenght - 1)
-        y_start: int = random.randint(0, self.height - 1)
-
-        while self.grid[y_start][x_start].is_42:
-            x_start: int = random.randint(0, self.lenght - 1)
-            y_start: int = random.randint(0, self.height - 1)
-
-        cell = self.grid[y_start][x_start]
-
-        print(f"y = {y_start}   x = {x_start}")
-        cell.unvisited = False
-        self.visited.add(cell)
-        self.add_neighbours(cell)
-        self.add_frontiers(cell)
-
-        while self.frontiers:
-            cell: Cell = random.choice(list(self.frontiers))
-            self.frontiers.remove(cell)
-            cell.unvisited = False
-            self.visited.add(cell)
-            self.add_neighbours(cell)
-            self.add_frontiers(cell)
-            self.break_frontier(cell)
+        while running:
+            start = maze[entry_y][entry_x]
+            exit = maze[exit_y][exit_x]
             os.system("clear")
-            self.print_maze()
-            time.sleep(0.009)
+            if not show_hide_path:
+                map.print_maze(map.ic)
+            else:
+                solver.print_maze(solver.ic)
+            if not access:
+                print("The output was not generated.")
+                print("File permissions are denied.")
+            print_instructions(map)
+            choice = input("Choice? (1-5): ")
 
+            if choice == "1":
+                map.maze_init()
+                maze = map.mazes[map.index_maze]()
+                if not is_perfect:
+                    maze = map.unperfect(maze)
+                solver.ic = map.ic
+                solving = False
+                show_hide_path = False
+
+            elif choice == "2":
+                if not show_hide_path:
+                    if not solving:
+                        path = solver.solving(maze, start, exit)
+                        access = output_maze(maze_txt, maze, start, exit, path)
+                        solving = True
+                    show_hide_path = True
+                else:
+                    show_hide_path = False
+
+            elif choice == "3":
+                map.ic = (map.ic + 1) % len(map.colors)
+                solver.ic = map.ic
+
+            elif choice == "4":
+                map.index_maze = (map.index_maze + 1) % len(map.mazes)
+                map.index_name = (map.index_name + 1) % len(map.maze_name)
+                map.maze_init()
+                maze = map.mazes[map.index_maze]()
+                solver.ic = map.ic
+                if not is_perfect:
+                    maze = map.unperfect(maze)
+                solving, show_hide_path = False, False
+
+            elif choice == "5":
+                running = False
+
+            else:
+                print("Invalid choice. Please try again with: (1-5)")
+                continue
+    except FileNotFoundError:
+        print("Error: The configuration file 'config.txt' was not found.")
+    except KeyError as e:
+        print(f"Error: Missing key {e} in the configuration file.")
+    except ValueError as e:
+        print(f"Value Error: {e}")
+    except KeyboardInterrupt:
+        print("\nProgram interrupted by user.")
+        sys.exit(0)
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+
+if __name__ == "__main__":
+    main()
