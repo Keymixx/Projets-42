@@ -16,5 +16,12 @@ class Zone:
         self.name = name
         self.x = x
         self.y = y
-        self.metadata = metadata
+        self.zone_type = metadata["zone"]
+        self.max_drones = metadata["max_drones"]
+        self.color = metadata["color"]
         self.link = []
+        self.start = False
+        self.end = False
+    
+    def __str__(self) -> str:
+        return f"{self.name} x: {self.x} y: {self.y}  type: {self.zone_type}  max: {self.max_drones}  color: {self.color}"
