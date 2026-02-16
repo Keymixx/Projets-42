@@ -48,7 +48,6 @@ def hub_parser(line: str, start_finish: bool) -> Zone:
         raw_metadata = occ_metadata[0]
         line = line.replace(f"[{raw_metadata}]", "")
         split_metadata = raw_metadata.split()
-
         for data in split_metadata:
             if data.startswith("zone="):
                 if start_finish:
@@ -76,7 +75,6 @@ def hub_parser(line: str, start_finish: bool) -> Zone:
         "max_drones": max_drones,
         "color": color
     }
-    
     split_hub = line.split()
 
     if len(split_hub) != 4:
@@ -112,19 +110,11 @@ def nb_drones_parser(line: str) -> int:
     return nb_drones
 
 
-def map_info_checker(map_info: Dict) -> bool:
-    zones = [zone.name for zone in map_info["zones"]]
-    connect = [connect.name for connect in map_info["connections"]]
-    
-    duplicated_zones = [i for i in set(zones) if zones.count(i) > 1]
-    duplicated_connect = [i for i in set(zones) if connect.count(i) > 1]
-
-    if duplicated_connect:
-        raise ValueError(f"duplicate connections: {duplicated_connect}")
-    if duplicated_zones:
-        raise ValueError(f"duplicate zones names: {duplicated_zones}")
-    
-    return True
+def check_duplicate(map_info: Dict, zone: Zone):
+    if any(zone.name == z.name for z in map_info["zones"]):
+        raise ValueError(f"duplicate zone name: {zone.name}")                    
+    if any((zone.x, zone.y) == (z.x, z.y) for z in map_info["zones"]):
+        raise ValueError(f"duplicate coord: x: {zone.x} y: {zone.y}")
 
 def parser(map: str) -> Dict:
 
@@ -172,19 +162,26 @@ def parser(map: str) -> Dict:
                     raise ValueError("first line must start with nb_drones")
                 
                 elif line.startswith("connection:"):
-                    map_info["connections"].append(connection_parser(line))
+                    connection = connection_parser(line)
+                    if any(connection.name == c.name for c in map_info["connections"]):
+                        raise ValueError(f"duplicate connextion: {connection.name}")
+                    map_info["connections"].append(connection)
 
                 elif line.startswith("hub:"):
-                    map_info["zones"].append(hub_parser(line, False))
+                    zone = hub_parser(line, False)
+                    check_duplicate(map_info, zone)
+                    map_info["zones"].append(zone)
 
                 elif line.startswith("start_hub:"):
                     start_zone = hub_parser(line, True)
+                    check_duplicate(map_info, start_zone)
                     start_zone.start = True
                     map_info["zones"].append(start_zone)
                     valid_lines.remove("start_hub:")
 
                 elif line.startswith("end_hub:"):
                     end_zone = hub_parser(line, True)
+                    check_duplicate(map_info, end_zone)
                     end_zone.end = True
                     map_info["zones"].append(end_zone)
                     valid_lines.remove("end_hub:")
