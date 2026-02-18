@@ -23,3 +23,6 @@ class Zone:
     
     def __str__(self) -> str:
         return f"{self.name}"
+    
+    def __lt__(self, other):
+        return self.type.value < other.type.value

@@ -1,5 +1,5 @@
 from model import Zone, ZoneType
-
+from heapq import heapify, heappop, heappush
 
 class Graph:
     def __init__(self, map_info: dict):
@@ -27,3 +27,52 @@ class Graph:
     def print_graph(self):
         for a, b in self.graph.items():
             print(a, b)
+
+    def shortest_distances(self, start: Zone):
+        distances = {zone: float("inf") for zone in self.graph}
+        distances[start] = 0
+
+        pq = [(0, start)]
+        heapify(pq)
+
+        visited = set()
+
+        while pq:
+            current_distance, current_zone = heappop(pq)
+
+            if current_zone in visited:
+                continue
+            visited.add(current_zone)
+
+            for neighbor, weight in self.graph[current_zone].items():
+                tentative_distance = current_distance + weight
+                if tentative_distance < distances[neighbor]:
+                    distances[neighbor] = tentative_distance
+                    heappush(pq, (tentative_distance, neighbor))
+        
+        predecessors = {node: None for node in self.graph}
+
+        for zone, distance in distances.items():
+           for neighbor, weight in self.graph[zone].items():
+               if distances[neighbor] == distance + weight + zone.type.value:
+                   predecessors[neighbor] = zone
+
+        return distances, predecessors
+    
+    def shortest_path(self, start: Zone, target: Zone):
+        
+        # Generate the predecessors dict
+        _, predecessors = self.shortest_distances(start)
+        
+        path = []
+        current_node = target
+        
+        # Backtrack from the target node using predecessors
+        while current_node:
+            path.append(current_node)
+            current_node = predecessors[current_node]
+        
+        # Reverse the path and return it
+        path.reverse()
+        
+        return path
