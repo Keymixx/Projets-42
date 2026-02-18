@@ -14,7 +14,7 @@ class TournamentPlatform:
         registration = f"{card.name} (ID: {card.id})"
         registration += f"- Interfaces: {interfaces}\n"
         registration += f"- Rating: {card.rating}\n"
-        registration += f"- Record: {card.get_rank_info()["record"]}\n"
+        registration += f"- Record: {card.get_rank_info()['record']}\n"
 
         return registration
 

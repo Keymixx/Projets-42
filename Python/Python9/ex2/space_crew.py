@@ -1,7 +1,12 @@
-from datetime import datetime
-from enum import Enum
-from pydantic import Field, BaseModel, model_validator
-from typing import List
+try:
+    from datetime import datetime
+    from enum import Enum
+    from pydantic import Field, BaseModel, model_validator
+    from typing import List
+
+except ModuleNotFoundError as e:
+    print(e)
+    print("- pip install pydantic")
 
 
 class Rank(Enum):
@@ -10,6 +15,7 @@ class Rank(Enum):
     LIEUTENANT = "lieutenant"
     CAPTAIN = "captain"
     COMMANDER = "commander"
+
 
 class CrewModel(BaseModel):
     member_id: str = Field(min_length=3, max_length=10)
@@ -36,7 +42,7 @@ class SpaceMission(BaseModel):
         if not self.mission_id[:1] == "M":
             raise ValueError("Mission ID must start with 'M'")
         return self
-    
+
     @model_validator(mode="after")
     def check_leader(self):
         leaders = []
@@ -47,7 +53,7 @@ class SpaceMission(BaseModel):
         if not leaders:
             raise ValueError("Must have at least one Commander or Captain")
         return self
-    
+
     @model_validator(mode="after")
     def long_mission(self):
         if self.duration_days > 365:
@@ -59,14 +65,15 @@ class SpaceMission(BaseModel):
             if not experienced_member >= crew_count / 2:
                 raise ValueError("Long missions need 50% experienced crew")
         return self
-    
+
     @model_validator(mode="after")
     def is_members_active(self):
         for member in self.crew:
             if not member.is_active:
                 raise ValueError("All crew members must be active")
         return self
-    
+
+
 def main():
     owel = CrewModel(
             member_id="ID001",
@@ -142,9 +149,9 @@ def main():
     print(f"Crew size: {len(mission.crew)}")
     print("Crew members:")
     for member in mission.crew:
-        print(f"- {member.name} ({member.rank.value}) - {member.specialization}")
+        print(f"- {member.name} ({member.rank.value})-{member.specialization}")
     print("\n=========================================")
-    
+
     crew = [yannis, felix, nicolas]
 
     mission = SpaceMission(
@@ -162,7 +169,7 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    
+
     except Exception as e:
         print("Expected validation error:")
         print(e.errors()[0]["msg"])

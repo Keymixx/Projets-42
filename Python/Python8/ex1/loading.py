@@ -23,9 +23,14 @@ try:
     plt.show()
     print("\nAnalysis complete!")
 
-
-except ImportError as e:
-    print(f"ImportError : {e}")
+except ImportError:
+    print("Not dependencies detected")
+    print("use:")
+    print("- pip install -r requirements.txt")
+    print("- python3 loading.py")
+    print("or")
+    print("- poetry install")
+    print("- poetry run python loading.py")
     sys.exit()
 
 except FileNotFoundError as e:
@@ -33,5 +38,9 @@ except FileNotFoundError as e:
     sys.exit()
 
 except PermissionError as e:
+    print(f"PermissionError : {e}")
+    sys.exit()
+
+except AttributeError as e:
     print(f"PermissionError : {e}")
     sys.exit()

@@ -78,7 +78,7 @@ def main():
     print(f"Result: {fireball()}")
 
     print("\nTesting power validator...")
-    print(f"Result: {cast_spell("Fireball", 50)}\n")
+    print(f"Result: {cast_spell('Fireball', 50)}\n")
 
     print("\nTesting retry spell...")
     print(broken_spell())
@@ -88,7 +88,7 @@ def main():
     name = "Alex123"
     power = 5
     print(f"{name} validate ?: {guild.validate_mage_name(name)}")
-    print(f"Try to cast with {power} of power: {guild.cast_spell(5, "fire")}")
+    print(f"Try to cast with {power} of power: {guild.cast_spell(5, 'fire')}")
 
 
 if __name__ == "__main__":

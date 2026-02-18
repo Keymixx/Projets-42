@@ -1,13 +1,20 @@
-from datetime import datetime
-from enum import Enum
-from pydantic import Field, BaseModel, model_validator
-from typing import Optional
+try:
+    from datetime import datetime
+    from enum import Enum
+    from pydantic import Field, BaseModel, model_validator
+    from typing import Optional
+
+except ModuleNotFoundError as e:
+    print(e)
+    print("- pip install pydantic")
+
 
 class ContactType(Enum):
     RADIO = "radio"
     VISUAL = "visual"
     PHYSICAL = "physical"
     TELEPATHIC = "thelepathic"
+
 
 class AlienContact(BaseModel):
     contact_id: str = Field(min_length=5, max_length=15)
@@ -25,24 +32,24 @@ class AlienContact(BaseModel):
         if not self.contact_id[:2] == "AC":
             raise ValueError("Contact ID must start with 'AC'")
         return self
-    
+
     @model_validator(mode="after")
     def is_verified_report(self):
         if not self.is_verified:
             raise ValueError("Physical contact reports must be verified")
         return self
-    
+
     @model_validator(mode="after")
     def check_witness(self):
         if self.contact_type == ContactType.TELEPATHIC:
             if self.witness_count < 3:
-                raise ValueError("Telepathic contact requires at least 3 witnesses")
+                raise ValueError("Telepathic requires at least 3 witnesses")
         return self
-    
+
     @model_validator(mode="after")
     def describe_strong_signal(self):
         if self.signal_strength > 7 and not self.message_received:
-            raise ValueError("Strong signals (> 7.0) should include received messages")
+            raise ValueError("Strong signals should include received messages")
         return self
 
 
@@ -58,7 +65,6 @@ def main():
         message_received="Greetings from Zeta Reticuli",
         is_verified=True
     )
-
 
     print("Alien Contact Log Validation")
     print("======================================")
@@ -84,10 +90,11 @@ def main():
         is_verified=True
     )
 
-if __name__ == "__name__":
+
+if __name__ == "__main__":
     try:
         main()
-    
+
     except Exception as e:
         print("Expected validation error:")
         print(e.errors()[0]["msg"])

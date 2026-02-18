@@ -23,6 +23,10 @@ if (__name__ == "__main__"):
     print("\nTurn execution:")
     print(f"Strategy: {game.strategy.get_strategy_name()}")
     print(f"Actions: {game.simulate_turn()}")
+    print(f"\nActions: {game.simulate_turn()}")
+    print(f"\nActions: {game.simulate_turn()}")
+    print(f"\nActions: {game.simulate_turn()}")
+    print(f"\nActions: {game.simulate_turn()}")
 
     print("\nGame Report:")
     print(f"{game.get_engine_status()}\n")

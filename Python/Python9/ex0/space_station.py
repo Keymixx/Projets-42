@@ -1,6 +1,11 @@
-from pydantic import BaseModel, Field, ValidationError
-from datetime import datetime, date
-from typing import Optional
+try:
+    from pydantic import BaseModel, Field, ValidationError
+    from datetime import datetime
+    from typing import Optional
+
+except ModuleNotFoundError as e:
+    print(e)
+    print("- pip install pydantic")
 
 
 class SpaceStation(BaseModel):
@@ -50,9 +55,10 @@ def main():
         notes="COUCOU"
     )
 
-if __name__ == "__name__":
+
+if __name__ == "__main__":
     try:
-        main()    
+        main()
     except ValidationError as e:
         print("Expected validation error:")
         print(e.errors()[0]["msg"])

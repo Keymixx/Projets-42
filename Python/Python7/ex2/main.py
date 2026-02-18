@@ -32,8 +32,8 @@ print("Combat phase:")
 print(f"Attack result: {kitty_warrior.attack(racoon_warrior)}")
 print(f"Defense result: {kitty_warrior.defend(7)}")
 
-print("\nMagic phase:")
-print(f"Spel cast: {kitty_warrior.cast_spell('Magic Meow', [racoon_warrior])}")
+print("Magic phase:")
+print(f"Spell cast: {kitty_warrior.cast_spell('Magic Meow',[racoon_warrior])}")
 print(f"Mana Channel: {kitty_warrior.channel_mana(3)}")
 
 print("\nMultiple interface implementation successful!")

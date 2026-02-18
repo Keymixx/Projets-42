@@ -3,11 +3,11 @@ from model.zone import Zone
 
 
 class Connection:
-    def __init__(self, zone1: str, zone2: str, metadata: Optional[Dict]):
-        self.name = f"{zone1}-{zone2}"
+    def __init__(self, zone1: Zone, zone2: Zone, metadata: Optional[Dict]):
+        self.name = f"{zone1.name}-{zone2.name}"
         self.zone1 = zone1
         self.zone2 = zone2
-        
+
         if metadata:
             self.capacity = metadata["max_link_capacity"]
         else:
