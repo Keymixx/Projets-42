@@ -45,7 +45,10 @@ class Graph:
             visited.add(current_zone)
 
             for neighbor, weight in self.graph[current_zone].items():
-                tentative_distance = current_distance + weight
+                # distance  = current_distance + weight + neighbor.type.value
+                # heappush(pq, (distance, neighbor))
+
+                tentative_distance = current_distance + weight + neighbor.type.value
                 if tentative_distance < distances[neighbor]:
                     distances[neighbor] = tentative_distance
                     heappush(pq, (tentative_distance, neighbor))
@@ -54,6 +57,7 @@ class Graph:
 
         for zone, distance in distances.items():
            for neighbor, weight in self.graph[zone].items():
+               print(f"(zone = {zone} nei = {neighbor}  dist nei = {distances[neighbor]}  == {distance + weight + zone.type.value}")
                if distances[neighbor] == distance + weight + zone.type.value:
                    predecessors[neighbor] = zone
 
