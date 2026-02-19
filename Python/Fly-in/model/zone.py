@@ -4,7 +4,7 @@ from enum import Enum
 
 class ZoneType(Enum):
     NORMAL = 1
-    BLOCKED = float("inf")
+    BLOCKED = 999
     RESTRICTED = 2
     PRIORITY = 0.8
 
@@ -24,5 +24,5 @@ class Zone:
     def __str__(self) -> str:
         return f"{self.name}"
     
-    def __lt__(self, other):
+    def __lt__(self, other: Zone):
         return self.type.value < other.type.value

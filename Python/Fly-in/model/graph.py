@@ -12,9 +12,9 @@ class Graph:
         if zone1 not in self.graph:
             self.graph[zone1] = {}
         if zone1.type == ZoneType.BLOCKED or zone2.type == ZoneType.BLOCKED:
-            self.graph[zone1][zone2] = float("inf")
+            pass
         else:
-            self.graph[zone1][zone2] = 1
+            self.graph[zone1][zone2] = zone2.type.value
 
     def graph_init(self):
         for zone in self.zones:
@@ -45,38 +45,35 @@ class Graph:
             visited.add(current_zone)
 
             for neighbor, weight in self.graph[current_zone].items():
-                # distance  = current_distance + weight + neighbor.type.value
-                # heappush(pq, (distance, neighbor))
-
-                tentative_distance = current_distance + weight + neighbor.type.value
+                tentative_distance = current_distance + weight
                 if tentative_distance < distances[neighbor]:
                     distances[neighbor] = tentative_distance
                     heappush(pq, (tentative_distance, neighbor))
-        
+
+
         predecessors = {node: None for node in self.graph}
-
-        for zone, distance in distances.items():
-           for neighbor, weight in self.graph[zone].items():
-               print(f"(zone = {zone} nei = {neighbor}  dist nei = {distances[neighbor]}  == {distance + weight + zone.type.value}")
-               if distances[neighbor] == distance + weight + zone.type.value:
-                   predecessors[neighbor] = zone
-
+        
+        for node, distance in distances.items():
+           for neighbor, weight in self.graph[node].items():
+               if distances[neighbor] == distance + weight:
+                   predecessors[neighbor] = node
+        
         return distances, predecessors
+
+    def shortest_path(self, start: Zone, end: Zone):
+       # Generate the predecessors dict
+       _, predecessors = self.shortest_distances(start)
     
-    def shortest_path(self, start: Zone, target: Zone):
+       path = []
+       current_zone = end
+    
+       # Backtrack from the target node using predecessors
+       while current_zone:
+           path.append(current_zone)
+           current_zone = predecessors[current_zone]
+    
+       # Reverse the path and return it
+       path.reverse()
+    
+       return path
         
-        # Generate the predecessors dict
-        _, predecessors = self.shortest_distances(start)
-        
-        path = []
-        current_node = target
-        
-        # Backtrack from the target node using predecessors
-        while current_node:
-            path.append(current_node)
-            current_node = predecessors[current_node]
-        
-        # Reverse the path and return it
-        path.reverse()
-        
-        return path

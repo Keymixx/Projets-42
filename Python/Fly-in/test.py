@@ -17,9 +17,9 @@ for zone in info["zones"]:
         start = zone
     if zone.name == "impossible_goal":
         end = zone
-# distance, p = g.shortest_distances(start)
-# for a, b in p.items():
-#     print(f"a = {a}  b = {b}")
+distance, p = g.shortest_distances(start)
+for a, b in p.items():
+    print(f"a = {a}  b = {b}")
 f = g.shortest_path(start, end)
 for z in f:
     print(z)
