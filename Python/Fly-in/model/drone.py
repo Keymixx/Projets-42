@@ -13,7 +13,7 @@ class Drone:
         if self.current_zone.type.value == 2 and not self.restricted_turn:
             self.restricted_turn = True
             self.stay()
-        
+
         elif self in dest.queue or self.current_zone.end:
             if dest.check_capacity():
                 dest.queue.remove(self)
@@ -25,10 +25,10 @@ class Drone:
         elif dest.check_capacity() or dest.end or self in dest.actual_drones:
             self.move(dest)
             self.restricted_turn = False
-        
+
         else:
             dest.add_drone(self)
-        
+
         print(f"{self.id}-{self.current_zone}")
 
     def move(self, dest: Zone):
@@ -38,6 +38,6 @@ class Drone:
 
     def stay(self):
         pass
-    
+
     def __str__(self) -> str:
         return f"{self.id}"

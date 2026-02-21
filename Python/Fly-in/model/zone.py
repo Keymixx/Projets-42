@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 from enum import Enum
 
 
@@ -27,7 +27,7 @@ class Zone:
             self.actual_drones.append(drone)
         else:
             self.queue.append(drone)
-    
+
     def remove_drone(self, drone):
         if not self.start:
             self.actual_drones.remove(drone)
@@ -38,10 +38,8 @@ class Zone:
         else:
             return 0
 
-
     def __str__(self) -> str:
         return f"{self.name}"
-    
-    def __lt__(self, other: Zone):
+
+    def __lt__(self, other):
         return self.type.value < other.type.value
-    

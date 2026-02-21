@@ -4,7 +4,6 @@ from heapq import heapify, heappop, heappush
 from typing import List
 
 
-
 class Graph:
     def __init__(self, map_info: dict, start, end):
         self.zones = map_info["zones"]
@@ -44,59 +43,54 @@ class Graph:
         visited = set()
 
         while pq:
-            current_distance, current_zone = heappop(pq)
+            curr_distance, curr_zone = heappop(pq)
 
-            if current_zone in visited:
+            if curr_zone in visited:
                 continue
-            visited.add(current_zone)
+            visited.add(curr_zone)
 
-            for neighbor, weight in self.graph[current_zone].items():
-                tentative_distance = current_distance + weight + len(neighbor.queue)
-                if tentative_distance < distances[neighbor]:
-                    distances[neighbor] = tentative_distance
-                    heappush(pq, (tentative_distance, neighbor))
-
+            for nghb, weight in self.graph[curr_zone].items():
+                try_distance = curr_distance + weight + len(nghb.queue)
+                if try_distance < distances[nghb]:
+                    distances[nghb] = try_distance
+                    heappush(pq, (try_distance, nghb))
 
         predecessors = {node: None for node in self.graph}
-        
+
         for node, distance in distances.items():
-           for neighbor, weight in self.graph[node].items():
-               if distances[neighbor] == distance + weight + len(neighbor.queue):
-                   predecessors[neighbor] = node
-        
+            for nghb, weight in self.graph[node].items():
+                if distances[nghb] == distance + weight + len(nghb.queue):
+                    predecessors[nghb] = node
+
         return distances, predecessors
 
     def shortest_path(self, start: Zone, end: Zone):
-       # Generate the predecessors dict
-       _, predecessors = self.shortest_distances(start)
-    
-       path = []
-       current_zone = end
-    
-       # Backtrack from the target node using predecessors
-       while current_zone:
-           path.append(current_zone)
-           current_zone = predecessors[current_zone]
-    
-       # Reverse the path and return it
-       path.reverse()
-    
-       return path
-    
+
+        _, predecessors = self.shortest_distances(start)
+
+        path = []
+        curr_zone = end
+
+        while curr_zone:
+            path.append(curr_zone)
+            curr_zone = predecessors[curr_zone]
+
+        path.reverse()
+        return path
+
     def run(self, drones: List[Drone]):
         for drone in drones:
-            dist, p = self.shortest_distances(drone.current_zone)
+            dist, p = self.shortest_distances(drone.curr_zone)
             drone.distance = dist[self.end_zone]
-        
+
         sorted(drones, key=lambda x: x.distance)
         turn = 0
-        while not all([drone.current_zone.end for drone in drones]):
-        # for i in range(50):
+        while not all([drone.curr_zone.end for drone in drones]):
             turn += 1
             for drone in drones:
-                if drone.current_zone == self.end_zone:
+                if drone.curr_zone == self.end_zone:
                     continue
-                drone_path = self.shortest_path(drone.current_zone, self.end_zone)
+                drone_path = self.shortest_path(drone.curr_zone, self.end_zone)
                 drone.do_turn(drone_path[1])
             print()
         print(turn)

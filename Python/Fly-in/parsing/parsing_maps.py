@@ -1,4 +1,4 @@
-from typing import List, Dict, Union
+from typing import Dict, Union
 from model import Connection, Zone, ZoneType
 import re
 
@@ -125,9 +125,11 @@ def check_mismatch(map_info: Dict, data: Union[Zone, Connection]):
         if any(data.name == c.name for c in map_info["connections"]):
             raise ValueError(f"duplicate connection: {data.name}")
         if not any(data.zone1.name == zone.name for zone in map_info["zones"]):
-            raise ValueError(f"error connection ({data.name}): {data.zone1.name} not found")
+            raise ValueError(f"error connection ({data.name}):"
+                             f"{data.zone1.name} not found")
         if not any(data.zone2.name == zone.name for zone in map_info["zones"]):
-            raise ValueError(f"error connection ({data.name}): {data.zone2.name} not found") 
+            raise ValueError(f"error connection ({data.name}):"
+                             f"{data.zone2.name} not found")
 
     if isinstance(data, Zone):
         if any(data.name == z.name for z in map_info["zones"]):
