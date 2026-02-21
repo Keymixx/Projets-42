@@ -1,30 +1,33 @@
 from parsing import parser
 from vizualizator import graph_maker
 from model import Graph
+from model import Drone
 
 # try:
-info = parser("maps/challenger/01_the_impossible_dream.txt")
+info = parser("maps/hard/03_ultimate_challenge.txt")
 # print(f"nb_drones: {info['nb_drones']}")
 # for zone in info["zones"]:
-#     print(str(zone))
+    # if zone.name == "conv_restricted7":
+        # zone.queue.append(1)
 # for c in info["connections"]:
 #     print(str(c))
-g = Graph(info)
-g.graph_init()
-# g.print_graph()
 for zone in info["zones"]:
-    if zone.name == "start":
+    if zone.start:
         start = zone
-    if zone.name == "impossible_goal":
+    if zone.end:
         end = zone
+
+g = Graph(info, start, end)
+g.graph_init()
 distance, p = g.shortest_distances(start)
-for a, b in p.items():
-    print(f"a = {a}  b = {b}")
-f = g.shortest_path(start, end)
-for z in f:
-    print(z)
+drones = []
+for i in range(info["nb_drones"]):
+    drones.append(Drone(f"D{i+1}", start,end))
+
+g.run(drones)
+
 # except Exception as e:
 #     print(e)
 
 
-# graph_maker(info)
+graph_maker(info)

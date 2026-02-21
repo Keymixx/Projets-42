@@ -17,5 +17,5 @@ def graph_maker(map_info: dict) -> None:
                      color=zone.color)
     
     for connect in list_connections:
-        net.add_edge(connect.zone1, connect.zone2, value=connect.capacity, label=str(connect.capacity), color="lightgray")
+        net.add_edge(connect.zone1.name, connect.zone2.name, value=connect.capacity, label=str(connect.capacity), color="lightgray")
     net.show("map.html")
