@@ -20,23 +20,24 @@ class Zone:
         self.start = False
         self.end = False
         self.actual_drones = []
-        self.queue = []
+        self.incoming_drones = []
 
-    def add_drone(self, drone):
-        if self.check_capacity() or self.end:
-            self.actual_drones.append(drone)
-        else:
-            self.queue.append(drone)
+    def add_incoming(self, drone):
+        self.incoming_drones.append(drone)
+
+    def add_to_zone(self, drone):
+        self.incoming_drones.remove(drone)
+        self.actual_drones.append(drone)
 
     def remove_drone(self, drone):
         if not self.start:
             self.actual_drones.remove(drone)
 
-    def check_capacity(self) -> int:
-        if len(self.actual_drones) < self.max_drones:
-            return self.max_drones - len(self.actual_drones)
+    def not_full(self) -> int:
+        if len(self.actual_drones) + len(self.incoming_drones) < self.max_drones:
+            return True
         else:
-            return 0
+            return False
 
     def __str__(self) -> str:
         return f"{self.name}"

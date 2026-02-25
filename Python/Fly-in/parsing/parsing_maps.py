@@ -5,7 +5,7 @@ import re
 
 def connection_parser(line: str) -> Dict:
     split_connect = line.split()
-    metadata = None
+    metadata = {"max_link_capacity": 1}
     pattern_connect = r"^\w+-\w+$"
     pattern_metadata = r"^\[max_link_capacity=\d+\]$"
 
@@ -74,7 +74,7 @@ def hub_parser(line: str, start_finish: bool) -> Zone:
                     raise ValueError("max_drones must be a integer")
 
             elif data.startswith("color="):
-                color = data.strip("color=")
+                color = data.replace("color=", "")
 
             else:
                 raise ValueError(f"Invalid metada : {data}")

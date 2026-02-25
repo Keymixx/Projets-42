@@ -1,4 +1,5 @@
 from model import Drone
+from model import Connection
 from model import Zone, ZoneType
 from heapq import heapify, heappop, heappush
 from typing import List
@@ -50,7 +51,7 @@ class Graph:
             visited.add(curr_zone)
 
             for nghb, weight in self.graph[curr_zone].items():
-                try_distance = curr_distance + weight + len(nghb.queue)
+                try_distance = curr_distance + weight + len(nghb.incoming_drones)
                 if try_distance < distances[nghb]:
                     distances[nghb] = try_distance
                     heappush(pq, (try_distance, nghb))
@@ -59,7 +60,7 @@ class Graph:
 
         for node, distance in distances.items():
             for nghb, weight in self.graph[node].items():
-                if distances[nghb] == distance + weight + len(nghb.queue):
+                if distances[nghb] == distance + weight + len(nghb.incoming_drones):
                     predecessors[nghb] = node
 
         return distances, predecessors
@@ -78,19 +79,43 @@ class Graph:
         path.reverse()
         return path
 
-    def run(self, drones: List[Drone]):
-        for drone in drones:
-            dist, p = self.shortest_distances(drone.curr_zone)
-            drone.distance = dist[self.end_zone]
+    def find_connect(self, zone1: Zone, zone2: Zone):
+        for c in self.connections:
+            if c.zone1 == zone1 and c.zone2 == zone2:
+                return c
+            elif c.zone1 == zone2 and c.zone2 == zone1:
+                return c
+            else:
+                continue
 
-        sorted(drones, key=lambda x: x.distance)
+    def run(self, drones: List[Drone]):
+
         turn = 0
-        while not all([drone.curr_zone.end for drone in drones]):
+        while not all([drone.current_location == self.end_zone for drone in drones]):
+            for drone in drones:
+                dist, p = self.shortest_distances(drone.last_location)
+                drone.distance = dist[self.end_zone]
+            drones.sort(key=lambda x: x.distance)
+            
             turn += 1
             for drone in drones:
-                if drone.curr_zone == self.end_zone:
+                if drone.in_transit:
+                    drone.update_transit()
+                    if drone.in_transit:
+                        print(f"D{drone.id}-{drone.current_location}", end=" ")
+            
+            not_transit_drone = [drone for drone in drones if not drone.in_transit]
+            
+            for drone in not_transit_drone:
+                if drone.current_location == self.end_zone:
                     continue
-                drone_path = self.shortest_path(drone.curr_zone, self.end_zone)
-                drone.do_turn(drone_path[1])
+
+                dest: Zone = self.shortest_path(drone.current_location, self.end_zone)[1]
+                connect: Connection = self.find_connect(drone.current_location, dest)
+
+                if dest.not_full() and connect.check_capacity():
+                    drone.move(dest, connect)
+                    print(f"D{drone.id}-{drone.destination}", end=" ")
+
             print()
         print(turn)
