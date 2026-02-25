@@ -1,7 +1,7 @@
-from .connection import Connection
-from .zone import Zone, ZoneType
-from .drone import Drone
-from .graph import Graph
+from model.connection import Connection
+from model.zone import Zone, ZoneType
+from model.drone import Drone
+from model.graph import Graph
 
 
-__all__ = [Connection, Drone, Zone, ZoneType, Graph]
+__all__ = ["Connection", "Drone", 'Zone', 'ZoneType', 'Graph']

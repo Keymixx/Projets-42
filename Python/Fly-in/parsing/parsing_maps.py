@@ -1,9 +1,9 @@
-from typing import Dict, Union
+from typing import Dict, Union, Any
 from model import Connection, Zone, ZoneType
 import re
 
 
-def connection_parser(line: str) -> Dict:
+def connection_parser(line: str) -> Dict[str, Any]:
     split_connect = line.split()
     metadata = {"max_link_capacity": 1}
     pattern_connect = r"^\w+-\w+$"
@@ -52,17 +52,18 @@ def hub_parser(line: str, start_finish: bool) -> Zone:
             if data.startswith("zone="):
                 if start_finish:
                     raise ValueError("start or end zone type can't be modify")
-                zone_type = data.strip("zone=")
-                if zone_type not in valid_zones:
+                zone_str = data.strip("zone=")
+
+                if zone_str not in valid_zones:
                     raise ValueError(f"Invalid zone: {data}")
 
-                if zone_type == "normal":
+                if zone_str == ZoneType.NORMAL:
                     zone_type = ZoneType.NORMAL
-                if zone_type == "restricted":
+                if zone_str == "restricted":
                     zone_type = ZoneType.RESTRICTED
-                if zone_type == "blocked":
+                if zone_str == "blocked":
                     zone_type = ZoneType.BLOCKED
-                if zone_type == "priority":
+                if zone_str == "priority":
                     zone_type = ZoneType.PRIORITY
 
             elif data.startswith("max_drones="):
@@ -93,24 +94,24 @@ def hub_parser(line: str, start_finish: bool) -> Zone:
         raise ValueError("Dash not allowed in zone name")
 
     try:
-        split_hub[2] = int(split_hub[2])
+        x = int(split_hub[2])
     except ValueError:
         raise ValueError("<x> must be a integer")
 
     try:
-        split_hub[3] = int(split_hub[3])
+        y = int(split_hub[3])
     except ValueError:
         raise ValueError("<y> must be a integer")
 
-    return Zone(split_hub[1], split_hub[2], split_hub[3], metadata)
+    return Zone(split_hub[1], x, y, metadata)
 
 
 def nb_drones_parser(line: str) -> int:
-    nb_drones = line.strip("nb_drones:")
-    nb_drones = nb_drones.strip()
+    raw_nb_drones = line.strip("nb_drones:")
+    raw_nb_drones = raw_nb_drones.strip()
 
     try:
-        nb_drones = int(nb_drones)
+        nb_drones = int(raw_nb_drones)
     except ValueError:
         raise ValueError("nb_drones must be a integer")
 
@@ -120,7 +121,9 @@ def nb_drones_parser(line: str) -> int:
     return nb_drones
 
 
-def check_mismatch(map_info: Dict, data: Union[Zone, Connection]):
+def check_mismatch(map_info: Dict[str, Any],
+                   data: Union[Zone, Connection]) -> None:
+
     if isinstance(data, Connection):
         if any(data.name == c.name for c in map_info["connections"]):
             raise ValueError(f"duplicate connection: {data.name}")
@@ -138,9 +141,9 @@ def check_mismatch(map_info: Dict, data: Union[Zone, Connection]):
             raise ValueError(f"duplicate coord: x: {data.x} y: {data.y}")
 
 
-def parser(map: str) -> Dict:
+def parser(map: str) -> Dict[str, Any]:
 
-    map_info = {
+    map_info: Dict[str, Any] = {
         "nb_drones": 0,
         "connections": [],
         "zones": []

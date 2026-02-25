@@ -1,6 +1,6 @@
 from parsing import parser
-from vizualizator import graph_maker
 from model import Graph
+# from vizualizator import graph_maker
 from model import Drone
 
 # try:
@@ -15,11 +15,11 @@ g.graph_init()
 distance, p = g.shortest_distances(start)
 drones = []
 for i in range(info["nb_drones"]):
-    drones.append(Drone(f"{i+1}", start, end))
+    drones.append(Drone(f"{i+1}", start))
 g.run(drones)
 
 # except Exception as e:
 #     print(e)
 
 
-graph_maker(info)
+# graph_maker(info)
