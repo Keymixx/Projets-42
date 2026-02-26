@@ -17,7 +17,7 @@ def graph_maker(map_info: dict) -> None:
                      x=x,
                      y=y,
                      fixed=True,
-                     color=zone.color)
+                     color='\033[39m')
 
     for connect in list_connections:
         net.add_edge(connect.zone1.name,

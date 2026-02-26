@@ -4,7 +4,7 @@ from model import Graph
 from model import Drone
 
 # try:
-info = parser("maps/challenger/01_the_impossible_dream.txt")
+info = parser("maps/hard/02_capacity_hell.txt")
 for zone in info["zones"]:
     if zone.start:
         start = zone

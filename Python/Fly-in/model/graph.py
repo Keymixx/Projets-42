@@ -95,9 +95,9 @@ class Graph:
             turn += 1
             for drone in drones:
                 if drone.in_transit:
+                    if drone.turn_left == 1:
+                        print(f"D{drone.id}-{drone.destination}", end=" ")
                     drone.update_transit()
-                    if drone.in_transit:
-                        print(f"D{drone.id}-{drone.current}", end=" ")
 
             in_zone = [drone for drone in drones if not drone.in_transit]
 
@@ -112,7 +112,11 @@ class Graph:
 
                 if dest.not_full() and connect.check_capacity():
                     drone.move(dest, connect)
-                    print(f"D{drone.id}-{drone.destination}", end=" ")
+                    if drone.destination.type.value <= 1:
+                        print(f"D{drone.id}-{drone.destination}", end=" ")
+                    else:
+                        print(f"D{drone.id}-{connect}", end=" ")
 
+            print()
             print()
         print(turn)

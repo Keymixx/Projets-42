@@ -8,7 +8,7 @@ class Drone:
     def __init__(self, id: str, start: "Zone"):
         self.current: Union["Zone", Connection] = start
         self.last_location: "Zone" = start
-        self.destination: Optional["Zone"] = None
+        self.destination: Zone
         self.distance: float = 0
         self.id: str = id
         self.turn_left: int = 0
@@ -41,7 +41,6 @@ class Drone:
                 self.destination.add_to_zone(self)
                 self.current = self.destination
                 self.last_location = self.destination
-                self.destination = None
                 self.in_transit = False
 
     def __str__(self) -> str:

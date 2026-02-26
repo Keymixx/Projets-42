@@ -8,7 +8,7 @@ if TYPE_CHECKING:
 
 class Connection:
     def __init__(self, zone1: "Zone", zone2: "Zone", metadata: Dict[str, int]):
-        self.name = f"{zone1.name}-{zone2.name}"
+        self.name = f"{zone1}-{zone2}"
         self.zone1 = zone1
         self.zone2 = zone2
         self.capacity = metadata["max_link_capacity"]

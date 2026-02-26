@@ -5,6 +5,27 @@ if TYPE_CHECKING:
     from model.drone import Drone
 
 
+class ZoneColor(Enum):
+    purple = "\033[38;5;129m"
+    red = "\033[31m"
+    brown = "\033[38;5;130m"
+    black = "\033[30m"
+    orange = "\033[38;5;208m"
+    gold = "\033[38;5;220m"
+    darkred = "\033[38;5;88m"
+    violet = "\033[38;5;135m"
+    crimson = "\033[38;5;160m"
+    blue = "\033[34m"
+    cyan = "\033[36m"
+    yellow = "\033[33m"
+    green = "\033[32m"
+    lime = "\033[38;5;154m"
+    magenta = "\033[35m"
+    maroon = "\033[38;5;88m"
+    rainbow = 0
+    reset = "\033[0m"
+
+
 class ZoneType(Enum):
     NORMAL = 1
     BLOCKED = 999
@@ -40,8 +61,18 @@ class Zone:
     def not_full(self) -> bool:
         return (len(self.actual_drones) + len(self.incoming)) < self.max_drones
 
-    def __str__(self) -> str:
-        return f"{self.name}"
+    def rainbow_zone(self, text: str) -> str:
+        colors = list(ZoneColor)
+        result = ""
+        for i, char in enumerate(text):
+            color = colors[i % len(colors)]
+            result += color.value + char
+        return result + ZoneColor.reset.value
+
+    def __str__(self) -> Any:
+        if self.color == "rainbow":
+            return self.rainbow_zone(self.name)
+        return ZoneColor[self.color].value + self.name + ZoneColor.reset.value
 
     def __lt__(self, other: Zone) -> Any:
         return self.type.value < other.type.value
