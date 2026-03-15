@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_usleep.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/02 17:48:59 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/15 23:49:49 by carl             ###   ########.fr       */
+/*   Created: 2026/03/15 23:44:43 by carl              #+#    #+#             */
+/*   Updated: 2026/03/15 23:45:58 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/codexion.h"
+#include "../../include/codexion.h"
 
-void run_startup(t_rules rules)
+size_t	get_current_time(void)
 {
-	t_coder			**coders;
-	t_monitoring	manager;
-	
-	manager = monitoring_init(rules);
-	coders = coders_init(rules, manager);
-	
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		write(2, "gettimeofday() error\n", 22);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-int	main(int argc, char	*argv[])
+int	ft_usleep(size_t milliseconds)
 {
-	t_rules			rules;
-	
-	if (!args_checking(argc, argv))
-		return (0);
-	rules = get_rules(argv);
-	if (rules.number_of_coders > 1)
-		run_startup(rules);
-	return(0);
+	size_t	start;
+
+	start = get_current_time();
+	while ((get_current_time() - start) < milliseconds)
+		usleep(500);
+	return (0);
 }

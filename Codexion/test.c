@@ -3,27 +3,28 @@
 #include <time.h>
 #include <unistd.h>
 
-void func(void)
+size_t	get_current_time(void)
 {
-    usleep(200);
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		write(2, "gettimeofday() error\n", 22);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
+int	ft_usleep(size_t milliseconds)
+{
+	size_t	start;
 
+	start = get_current_time();
+	while ((get_current_time() - start) < milliseconds)
+		usleep(500);
+	return (0);
+}
 int main()
 {
-    struct timeval start;
-    struct timeval end;
-
-    gettimeofday(&start,NULL);
-    func();
-    gettimeofday(&end, NULL);
-
-    long seconds = end.tv_sec - start.tv_sec;
-    long microseconds = end.tv_usec - start.tv_usec;
-    long local_time = (end.tv_sec - start.tv_sec * 1000000) + microseconds;
-
-    printf("Execution Time = %ld microseconds\n", local_time);
-
-
+    printf("%d\n", get_current_time());
+    ft_usleep(500);
+    printf("%d\n", get_current_time());
     return(0);
 }

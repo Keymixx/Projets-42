@@ -1,35 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_message.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/02 17:48:59 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/15 23:49:49 by carl             ###   ########.fr       */
+/*   Created: 2026/03/15 23:47:46 by carl              #+#    #+#             */
+/*   Updated: 2026/03/16 00:12:41 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/codexion.h"
+#include "../../include/codexion.h"
 
-void run_startup(t_rules rules)
+void ft_message(char *str, t_coder coder)
 {
-	t_coder			**coders;
-	t_monitoring	manager;
-	
-	manager = monitoring_init(rules);
-	coders = coders_init(rules, manager);
-	
-}
-
-int	main(int argc, char	*argv[])
-{
-	t_rules			rules;
-	
-	if (!args_checking(argc, argv))
-		return (0);
-	rules = get_rules(argv);
-	if (rules.number_of_coders > 1)
-		run_startup(rules);
-	return(0);
+    pthread_mutex_lock(&coder.message);
+    printf("%d %s",coder.id, str);
+    pthread_mutex_unlock(&coder.message);
 }
