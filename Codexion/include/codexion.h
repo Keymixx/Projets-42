@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   codexion.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 21:26:11 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/16 00:11:16 by carl             ###   ########.fr       */
+/*   Updated: 2026/03/16 18:41:52 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,11 @@
 # include <string.h>
 # include <sys/time.h>
 
-typedef struct s_rules
+typedef struct s_dongles
 {
-	int			number_of_coders;
-	int			time_to_burnout;
-	int			time_to_compile;
-	int			time_to_debug;
-	int			time_to_refactor;
-	int			compiles_required;
-	int			dongle_cooldown;
-	char		*scheduler;
-	
-}				t_rules;
-
+	pthread_mutex_t dongle_mutex;
+	int				queue[2];
+}				t_dongles;
 
 typedef struct s_coder
 {
@@ -56,10 +48,11 @@ typedef struct s_coder
 	int				actual_compiles;
 	int				last_compile;
 	bool			alive;
-	pthread_mutex_t *l_dongle;
-	pthread_mutex_t *r_dongle;
+	t_dongles 		*l_dongle;
+	t_dongles 		*r_dongle;
 	pthread_mutex_t *message;
 	pthread_t		thread;
+
 }				t_coder;
 
 typedef struct s_monitoring
@@ -73,12 +66,33 @@ typedef struct s_monitoring
 	pthread_t 		manager;
 }			t_monitoring;
 
+typedef struct s_data
+{
+	int			number_of_coders;
+	int			time_to_burnout;
+	int			time_to_compile;
+	int			time_to_debug;
+	int			time_to_refactor;
+	int			compiles_required;
+	int			dongle_cooldown;
+	char		*scheduler;
+
+	pthread_mutex_t message;
+	
+	t_monitoring	*manager;
+	t_dongles		**dongles;
+	t_coder			**coders;
+}			t_data;
+
+
 bool			args_checking(int argc, char *argv[]);
-t_rules 		get_rules(char *argv[]);
-void			run_startup(t_rules rules);
-t_monitoring 	monitoring_init(t_rules rules);
-t_coder 		**coders_init(t_rules rules, t_monitoring manager)
+t_data 			get_data(char *argv[]);
+void			run_startup(t_data data);
+void 			monitoring_init(t_data *data);
+void 			coders_init(t_data *data);
+void			dongle_init(t_data *data);
 int				ft_usleep(size_t milliseconds);
-void 			ft_message(char *str, t_coder coder)
+void 			ft_message(char *str, t_coder coder);
+void 			*work(void *arg);
 
 #endif

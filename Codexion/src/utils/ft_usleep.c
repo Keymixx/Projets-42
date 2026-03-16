@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_usleep.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 23:44:43 by carl              #+#    #+#             */
-/*   Updated: 2026/03/15 23:45:58 by carl             ###   ########.fr       */
+/*   Updated: 2026/03/16 13:00:59 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ size_t	get_current_time(void)
 int	ft_usleep(size_t milliseconds)
 {
 	size_t	start;
-
 	start = get_current_time();
 	while ((get_current_time() - start) < milliseconds)
+	{
 		usleep(500);
+	}
 	return (0);
 }
