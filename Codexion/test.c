@@ -23,8 +23,8 @@ int	ft_usleep(size_t milliseconds)
 }
 int main()
 {
-    printf("%d\n", get_current_time());
+    printf("%ld\n", get_current_time());
     ft_usleep(500);
-    printf("%d\n", get_current_time());
+    printf("%ld\n", get_current_time());
     return(0);
 }

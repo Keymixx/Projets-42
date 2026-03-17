@@ -1,18 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_message.c                                       :+:      :+:    :+:   */
+/*   fifo_edf.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/15 23:47:46 by carl              #+#    #+#             */
-/*   Updated: 2026/03/17 14:25:28 by caaubert         ###   ########.fr       */
+/*   Created: 2026/03/17 12:34:48 by caaubert          #+#    #+#             */
+/*   Updated: 2026/03/17 13:30:29 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/codexion.h"
 
-void ft_message(char *str, t_coder coder)
+void schelude(char *str)
 {
-    printf("%d %s\n",coder.id, str);
+	
+}
+
+void try_lock_dongle(t_coder *coder, pthread_mutex_t *dongle)
+{
+	int cooldown;
+
+	cooldown = coder->r_dongle->dongle_cooldown;
+	ft_usleep(cooldown);
+	
 }
