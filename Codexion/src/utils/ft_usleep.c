@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 23:44:43 by carl              #+#    #+#             */
-/*   Updated: 2026/03/17 16:51:50 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:56:50 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@ size_t	get_current_time(void)
 
 int	ft_usleep(size_t milliseconds, t_coder *coder)
 {
-	void(*coder);
 	size_t	start;
 	start = get_current_time();
 	while ((get_current_time() - start) < milliseconds)
 	{
 		usleep(500);
+		if(!coder->all_alive)
+			while (true);
 	}
 	return (0);
 }

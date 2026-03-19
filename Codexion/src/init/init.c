@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 01:41:18 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/17 16:16:07 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:41:26 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void coders_init(t_data *data)
 	t_coder **all_coders;
 
 	i = 0;
-	all_coders = malloc((sizeof(t_coder *) * data->number_of_coders) + 1);
+	all_coders = malloc(sizeof(t_coder *) * (data->number_of_coders + 1));
 	while(i < data->number_of_coders)
 	{
 		all_coders[i] = malloc(sizeof(t_coder));
@@ -59,6 +59,9 @@ void coders_init(t_data *data)
 		all_coders[i]->time_to_refactor = data->time_to_refactor;
 		all_coders[i]->message = &data->message;
 		all_coders[i]->death_cond = &data->death_cond;
+		all_coders[i]->death_mutex = &data->death_mutex;
+		all_coders[i]->all_alive = &data->all_alive;
+		all_coders[i]->time = &data->time;
 		i++;
 	}
 	all_coders[i] = NULL;

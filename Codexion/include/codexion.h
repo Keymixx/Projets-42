@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 21:26:11 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/17 16:09:50 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:58:41 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,14 @@ typedef struct s_coder
 	int				time_to_debug;
 	int				time_to_refactor;
 	int				actual_compiles;
+	int				*all_alive;
+	
 	size_t			last_compile;
-	bool			alive;
+	size_t			*time;
 	
 	pthread_cond_t	*death_cond;
+	pthread_mutex_t *death_mutex;
+	
 	t_dongles 		*l_dongle;
 	t_dongles 		*r_dongle;
 	pthread_mutex_t *message;
@@ -67,8 +71,10 @@ typedef struct s_data
 	int				compiles_required;
 	int				dongle_cooldown;
 	char			*scheduler;
+	int				all_alive;
+	
 	size_t			time_to_burnout;
-	bool			all_alive;
+	size_t			time;
 	
 	pthread_cond_t	death_cond;
 	pthread_mutex_t death_mutex;

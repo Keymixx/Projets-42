@@ -1,7 +1,7 @@
 NAME = codexion
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I includes
+CFLAGS = -Wall -Wextra -Werror -I includes -g3
 
 SRC =  src/main.c \
        src/parsing/args_parsing.c \

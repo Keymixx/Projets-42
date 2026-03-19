@@ -6,34 +6,23 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 17:48:59 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/17 16:15:49 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/19 17:45:19 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/codexion.h"
 
-bool all_alive(t_coder **coders, int nb_coders)
-{
-	int	i;
-	
-	i = 0;
-	while(i < nb_coders)
-	{
-		if(!coders[i]->alive)
-			return false;
-		i++;
-	}
-	return true;
-}
 
 void run_startup(t_data *data)
 {
 	int	i;
 
 	pthread_cond_init(&data->death_cond, NULL);
+	pthread_mutex_init(&data->death_mutex, NULL);
+	data->all_alive = 1;
 	coders_init(data);
 	dongle_init(data);
-	
+	data->time = get_current_time();
 	printf("\n");
 	
 	i = 0;
@@ -43,8 +32,8 @@ void run_startup(t_data *data)
 		i++;
 	}
 	pthread_mutex_lock(&data->death_mutex);
-	while (all_alive(data->coders, data->number_of_coders))
-		pthread_cond_wait(&data->death_cond, &data->death_mutex);
+	while (data->all_alive) // ou ton état
+    	pthread_cond_wait(&data->death_cond, &data->death_mutex);
 	i = 0;
 	while (i < data->number_of_coders)
 	{
@@ -53,6 +42,21 @@ void run_startup(t_data *data)
 	}
 	pthread_mutex_destroy(&data->death_mutex);
 	pthread_cond_destroy(&data->death_cond);
+}
+
+void ft_free(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->number_of_coders)
+	{
+		free(data->coders[i]);
+		free(data->dongles[i]);
+		i++;
+	}
+	free(data->coders);
+	free(data->dongles);
 }
 
 int	main(int argc, char	*argv[])
@@ -64,6 +68,7 @@ int	main(int argc, char	*argv[])
 	data = get_data(argv);
 	if (data.number_of_coders > 1)
 		run_startup(&data);
-	
+	ft_free(&data);
+	printf("caca\n");
 	return(0);
 }

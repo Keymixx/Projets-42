@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
@@ -23,8 +24,5 @@ int	ft_usleep(size_t milliseconds)
 }
 int main()
 {
-    printf("%ld\n", get_current_time());
-    ft_usleep(500);
-    printf("%ld\n", get_current_time());
-    return(0);
+	printf("%d\n", atoi("a"));
 }
