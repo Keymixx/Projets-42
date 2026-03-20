@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_usleep.c                                        :+:      :+:    :+:   */
+/*   project_finish.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/15 23:44:43 by carl              #+#    #+#             */
-/*   Updated: 2026/03/20 16:14:55 by caaubert         ###   ########.fr       */
+/*   Created: 2026/03/20 16:36:56 by caaubert          #+#    #+#             */
+/*   Updated: 2026/03/20 17:07:47 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/codexion.h"
 
-long long	get_current_time(void)
+bool project_finish(t_data *data)
 {
-	struct timeval	time;
+	int	i;
+	int nb_coders;
 
-	if (gettimeofday(&time, NULL) == -1)
-		write(2, "gettimeofday() error\n", 22);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
-
-int	ft_usleep(long long milliseconds, t_coder *coder)
-{
-	(void)coder;
-	long long	start;
-	start = get_current_time();
-	while ((get_current_time() - start) < milliseconds)
+	i = 0;
+	nb_coders = data->number_of_coders;
+	while(i < nb_coders)
 	{
-		usleep(500);
+		if (data->coders[i]->actual_compiles < data->compiles_required)
+			return false;
 	}
-	return (0);
+	return true;
 }

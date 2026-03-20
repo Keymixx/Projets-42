@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 21:26:11 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/19 17:58:41 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:08:08 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,24 @@ typedef struct s_dongles
 	pthread_mutex_t dongle_mutex;
 	int				dongle_cooldown;
 	int				queue[2];
+	bool			init;
 }				t_dongles;
 
 typedef struct s_coder
 {
 	int				id;
-	size_t			time_to_burnout;
+	long long		time_to_burnout;
 	int				time_to_compile;
 	int				time_to_debug;
 	int				time_to_refactor;
 	int				actual_compiles;
 	int				*all_alive;
 	
-	size_t			last_compile;
-	size_t			*time;
+	long long			last_compile;
+	long long			*time;
 	
 	pthread_cond_t	*death_cond;
 	pthread_mutex_t *death_mutex;
-	
 	t_dongles 		*l_dongle;
 	t_dongles 		*r_dongle;
 	pthread_mutex_t *message;
@@ -73,8 +73,8 @@ typedef struct s_data
 	char			*scheduler;
 	int				all_alive;
 	
-	size_t			time_to_burnout;
-	size_t			time;
+	long long			time_to_burnout;
+	long long			time;
 	
 	pthread_cond_t	death_cond;
 	pthread_mutex_t death_mutex;
@@ -90,9 +90,10 @@ t_data 			get_data(char *argv[]);
 void			run_startup(t_data *data);
 void 			coders_init(t_data *data);
 void			dongle_init(t_data *data);
-int				ft_usleep(size_t milliseconds, t_coder *coder);
-void 			ft_message(char *str, t_coder coder);
-size_t			get_current_time(void);
+int				ft_usleep(long long milliseconds, t_coder *coder);
+void 			ft_message(char *str, t_coder *coder);
+long long		get_current_time(void);
 void 			*work(void *arg);
+bool 			project_finish(t_data *data);
 
 #endif

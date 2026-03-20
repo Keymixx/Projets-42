@@ -9,7 +9,8 @@ SRC =  src/main.c \
 	   src/init/init.c \
 	   src/routine/work.c \
 	   src/utils/ft_message.c \
-	   src/utils/ft_usleep.c
+	   src/utils/ft_usleep.c \
+	   src/utils/project_finish.c
 
 OBJ = $(SRC:.c=.o)
 

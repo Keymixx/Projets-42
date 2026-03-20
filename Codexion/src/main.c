@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 17:48:59 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/19 17:45:19 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/20 17:11:29 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,13 @@ void run_startup(t_data *data)
 		i++;
 	}
 	pthread_mutex_lock(&data->death_mutex);
-	while (data->all_alive) // ou ton état
+	while (data->all_alive)
     	pthread_cond_wait(&data->death_cond, &data->death_mutex);
 	i = 0;
+	pthread_mutex_unlock(&data->death_mutex);
 	while (i < data->number_of_coders)
 	{
+		pthread_join(data->coders[i]->thread, NULL);
 		pthread_mutex_destroy(&data->dongles[i]->dongle_mutex);
 		i++;
 	}
@@ -69,6 +71,5 @@ int	main(int argc, char	*argv[])
 	if (data.number_of_coders > 1)
 		run_startup(&data);
 	ft_free(&data);
-	printf("caca\n");
 	return(0);
 }

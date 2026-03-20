@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 01:41:18 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/19 17:41:26 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/20 16:47:53 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void coders_init(t_data *data)
 		all_coders[i]->death_mutex = &data->death_mutex;
 		all_coders[i]->all_alive = &data->all_alive;
 		all_coders[i]->time = &data->time;
+		all_coders[i]->actual_compiles = 0;
 		i++;
 	}
 	all_coders[i] = NULL;
