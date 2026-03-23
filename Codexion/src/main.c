@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 17:48:59 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/20 17:11:29 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/23 15:48:55 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,18 @@ void run_startup(t_data *data)
 {
 	int	i;
 
-	pthread_cond_init(&data->death_cond, NULL);
+	pthread_cond_init(&data->finish_cond, NULL);
 	pthread_mutex_init(&data->death_mutex, NULL);
 	data->all_alive = 1;
 	coders_init(data);
 	dongle_init(data);
 	data->time = get_current_time();
-	printf("\n");
-	
-	i = 0;
-	while (i < data->number_of_coders)
-	{
+	i = -1;
+	while (++i < data->number_of_coders)
 		pthread_create(&data->coders[i]->thread, NULL, &work, data->coders[i]);
-		i++;
-	}
 	pthread_mutex_lock(&data->death_mutex);
-	while (data->all_alive)
-    	pthread_cond_wait(&data->death_cond, &data->death_mutex);
+	while (data->all_alive && !project_finish(data))
+		pthread_cond_wait(&data->finish_cond, &data->death_mutex);
 	i = 0;
 	pthread_mutex_unlock(&data->death_mutex);
 	while (i < data->number_of_coders)
@@ -43,7 +38,7 @@ void run_startup(t_data *data)
 		i++;
 	}
 	pthread_mutex_destroy(&data->death_mutex);
-	pthread_cond_destroy(&data->death_cond);
+	pthread_cond_destroy(&data->finish_cond);
 }
 
 void ft_free(t_data *data)

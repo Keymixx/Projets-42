@@ -6,13 +6,13 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 16:36:56 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/20 17:07:47 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/23 15:37:57 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/codexion.h"
 
-bool project_finish(t_data *data)
+int	project_finish(t_data *data)
 {
 	int	i;
 	int nb_coders;
@@ -22,7 +22,8 @@ bool project_finish(t_data *data)
 	while(i < nb_coders)
 	{
 		if (data->coders[i]->actual_compiles < data->compiles_required)
-			return false;
+			return(0);
+		i++;
 	}
-	return true;
+	return(1);
 }

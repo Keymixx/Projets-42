@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 01:41:18 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/20 16:47:53 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/23 17:03:52 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void dongle_init(t_data *data)
 	while (i < nb_coders)
 	{
 		dongles[i] = malloc(sizeof(t_dongles));
-		dongles[i]->queue[0] = -1;
-		dongles[i]->queue[1] = -1;
+		dongles[i]->queue[0] = NULL;
+		dongles[i]->queue[1] = NULL;
 		dongles[i]->dongle_cooldown = data->compiles_required;
 		pthread_mutex_init(&dongles[i++]->dongle_mutex, NULL);
 	}
@@ -58,11 +58,12 @@ void coders_init(t_data *data)
 		all_coders[i]->time_to_debug = data->time_to_debug;
 		all_coders[i]->time_to_refactor = data->time_to_refactor;
 		all_coders[i]->message = &data->message;
-		all_coders[i]->death_cond = &data->death_cond;
+		all_coders[i]->finish_cond = &data->finish_cond;
 		all_coders[i]->death_mutex = &data->death_mutex;
 		all_coders[i]->all_alive = &data->all_alive;
 		all_coders[i]->time = &data->time;
 		all_coders[i]->actual_compiles = 0;
+		all_coders[i]->data = data;
 		i++;
 	}
 	all_coders[i] = NULL;

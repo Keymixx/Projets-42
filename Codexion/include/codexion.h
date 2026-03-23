@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 21:26:11 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/20 17:08:08 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/23 17:03:03 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,14 @@
 # include <string.h>
 # include <sys/time.h>
 
+typedef struct s_data t_data;
+
 typedef struct s_dongles
 {
 	pthread_mutex_t dongle_mutex;
+	t_coder			*queue[2];
 	int				dongle_cooldown;
-	int				queue[2];
-	bool			init;
+	bool			is_taken;
 }				t_dongles;
 
 typedef struct s_coder
@@ -53,13 +55,14 @@ typedef struct s_coder
 	long long			last_compile;
 	long long			*time;
 	
-	pthread_cond_t	*death_cond;
+	pthread_cond_t	*finish_cond;
 	pthread_mutex_t *death_mutex;
 	t_dongles 		*l_dongle;
 	t_dongles 		*r_dongle;
 	pthread_mutex_t *message;
 	pthread_t		thread;
 
+	t_data			*data;
 }				t_coder;
 
 typedef struct s_data
@@ -76,7 +79,7 @@ typedef struct s_data
 	long long			time_to_burnout;
 	long long			time;
 	
-	pthread_cond_t	death_cond;
+	pthread_cond_t	finish_cond;
 	pthread_mutex_t death_mutex;
 	pthread_mutex_t message;
 	
@@ -94,6 +97,6 @@ int				ft_usleep(long long milliseconds, t_coder *coder);
 void 			ft_message(char *str, t_coder *coder);
 long long		get_current_time(void);
 void 			*work(void *arg);
-bool 			project_finish(t_data *data);
+int				project_finish(t_data *data);
 
 #endif

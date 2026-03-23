@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 00:06:37 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/20 16:48:10 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/23 15:50:23 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ void *work(void *arg)
 	t_coder *coder;
 	
 	coder = (t_coder *)arg;
-	pthread_cond_broadcast(coder->death_cond);
+	pthread_cond_broadcast(coder->finish_cond);
 	if(coder->id % 2 == 0)
 		ft_usleep(200, coder);
 	coder->last_compile = get_current_time();
-	while(*coder->all_alive)
+	while(*coder->all_alive && !project_finish(coder->data))
 	{
 		if(pthread_mutex_lock(&coder->r_dongle->dongle_mutex) != 0)
 			printf("ERROR R\n");
@@ -35,6 +35,7 @@ void *work(void *arg)
 		ft_message("has taken a dongle", coder);
 		compiling(coder);
 		coder->actual_compiles++;
+		pthread_cond_broadcast(coder->finish_cond);
 		pthread_mutex_unlock(&coder->r_dongle->dongle_mutex);
 		pthread_mutex_unlock(&coder->l_dongle->dongle_mutex);
 		debugging(coder);
