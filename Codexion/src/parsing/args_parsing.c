@@ -17,7 +17,7 @@ bool	args_checking(int argc, char *argv[])
 	int	i;
 
 	i = 1;
-	if (argc != 8)
+	if (argc != 9)
 	{
 		fprintf(stderr, "Error: Invalid number of argument\n Usage: ");
 		fprintf(stderr, NB_CODERS BURNOUT COMPILE DEBUG REFACTOR);
@@ -25,13 +25,14 @@ bool	args_checking(int argc, char *argv[])
 		return(false);
 	}
 
-	while (i++ < argc - 2)
+	while (i < argc - 1)
 	{
 		if (atoi(argv[i]) <= 0)
 		{
 			fprintf(stderr, "Error: %s have to be a positive integer\n", argv[i]);
 			return(false);
 		}
+		i++;
 	}
 	if (strcmp(argv[i], "fifo") == 0 || strcmp(argv[i], "edf") == 0)
 		return(true);

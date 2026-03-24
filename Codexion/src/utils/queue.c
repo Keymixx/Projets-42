@@ -3,65 +3,81 @@
 /*                                                        :::      ::::::::   */
 /*   queue.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 15:50:55 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/23 17:54:12 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/24 18:53:02 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/codexion.h"
 
+void push(t_dongles *dongle, t_coder *coder);
+void pop(t_dongles *dongle, t_coder *coder);
+bool your_turn(char *str, t_dongles *dongle, t_coder *coder);
+
 void lock_mutex(t_dongles *dongle, t_coder *coder)
 {
 	pthread_mutex_lock(&dongle->dongle_mutex);
-	if(!dongle->is_taken)
+	if(!dongle->is_taken && dongle->dongle_avaible <= get_current_time())
 	{
 		dongle->is_taken = true;
+		pthread_mutex_unlock(&dongle->dongle_mutex);
 		return;		
 	}
 	push(dongle, coder);
-	while(!your_turn(c))
-		pthread_cond_wait();
+	while(!your_turn(dongle->scheduler ,dongle, coder))
+		pthread_cond_wait(&dongle->dongle_cond, &dongle->dongle_mutex);
 	dongle->is_taken = true;
 	pop(dongle, coder);
+	pthread_mutex_unlock(&dongle->dongle_mutex);
 }
 
 void unlock_mutex(t_dongles *dongle, t_coder *coder)
 {
-	pthread_mutex_unlock(&dongle->dongle_mutex);
-	ft_usleep(dongle->dongle_cooldown, coder);
+	(void)coder;
+	dongle->dongle_avaible = dongle->dongle_cooldown + get_current_time();
 	dongle->is_taken = false;
+	pthread_cond_broadcast(&dongle->dongle_cond);
 }
 
-bool algo(char *str, t_dongles dongle, t_coder coder)
+bool your_turn(char *str, t_dongles *dongle, t_coder *coder)
 {
-	if(strcmp(str, "fifo" == 0)
-	{
-		
-	}
+    if(strcmp(str, "fifo") == 0)
+    {
+        if(dongle->queue[0] == coder && dongle->dongle_avaible <= get_current_time())
+            return(true);
+        return(false);
+    }
+    if(dongle->queue[0] == coder)
+        return(true);
+    if(dongle->queue[1] == NULL)
+        return(false);
+    if(dongle->queue[0]->last_compile < coder->last_compile)
+        return(false);
+    return(true);
 }
 
 void push(t_dongles *dongle, t_coder *coder)
 {
-	if(dongle->queue[1] && dongle->queue[2])
-		fprintf(2, "Queue Push Error\n");
+	if(dongle->queue[0] && dongle->queue[1])
+		fprintf(stderr, "Queue Push Error\n");
 	
-	else if(dongle->queue[1])
-		dongle->queue[2] = coder;
+	else if(dongle->queue[0])
+		dongle->queue[1] = coder;
 	
 	else
-		dongle->queue[1] = coder;
+		dongle->queue[0] = coder;
 }
 
 void pop(t_dongles *dongle, t_coder *coder)
 {
-	if(!dongle->queue[1] && !dongle->queue[2])
-		fprintf(2, "Queue Pop Error\n");
-	
-	if(dongle->queue[2] == coder)
-		dongle->queue[2] = NULL;
+	if(!dongle->queue[0] && !dongle->queue[1])
+		fprintf(stderr, "Queue Pop Error\n");
 	
 	if(dongle->queue[1] == coder)
-		dongle->queue[1] = dongle->queue[2];
+		dongle->queue[1] = NULL;
+	
+	if(dongle->queue[0] == coder)
+		dongle->queue[0] = dongle->queue[1];
 }

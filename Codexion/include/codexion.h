@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   codexion.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 21:26:11 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/23 17:03:03 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/24 17:34:41 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define REFACTOR "time_to_refactor  "
 # define NB_COMPILES "number_of_compiles_required  "
 # define DONGLE "dongle_cooldown  "
-# define SCHELUDER "dongle_cooldown"
+# define SCHELUDER "scheduler  "
 
 # define LIST_ARGS
 
@@ -33,12 +33,16 @@
 # include <sys/time.h>
 
 typedef struct s_data t_data;
+typedef struct s_coder t_coder;
 
 typedef struct s_dongles
 {
 	pthread_mutex_t dongle_mutex;
+	pthread_cond_t 	dongle_cond;
 	t_coder			*queue[2];
 	int				dongle_cooldown;
+	long long		dongle_avaible;
+	char			*scheduler;
 	bool			is_taken;
 }				t_dongles;
 
@@ -98,5 +102,7 @@ void 			ft_message(char *str, t_coder *coder);
 long long		get_current_time(void);
 void 			*work(void *arg);
 int				project_finish(t_data *data);
+void			lock_mutex(t_dongles *dongle, t_coder *coder);
+void 			unlock_mutex(t_dongles *dongle, t_coder *coder);
 
 #endif

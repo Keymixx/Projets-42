@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   work.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 00:06:37 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/23 15:50:23 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/24 18:56:44 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,28 @@ void *work(void *arg)
 	
 	coder = (t_coder *)arg;
 	pthread_cond_broadcast(coder->finish_cond);
-	if(coder->id % 2 == 0)
-		ft_usleep(200, coder);
 	coder->last_compile = get_current_time();
 	while(*coder->all_alive && !project_finish(coder->data))
 	{
-		if(pthread_mutex_lock(&coder->r_dongle->dongle_mutex) != 0)
-			printf("ERROR R\n");
+		if(coder->id % 2 == 0)
+		{
+		lock_mutex(coder->r_dongle, coder);
 		ft_message("has taken a dongle", coder);
-		if(pthread_mutex_lock(&coder->l_dongle->dongle_mutex) != 0)
-			printf("ERROR L\n");
+		lock_mutex(coder->l_dongle, coder);
 		ft_message("has taken a dongle", coder);
+		}
+		else
+		{
+		lock_mutex(coder->l_dongle, coder);
+		ft_message("has taken a dongle", coder);
+		lock_mutex(coder->r_dongle, coder);
+		ft_message("has taken a dongle", coder);
+		}
 		compiling(coder);
 		coder->actual_compiles++;
 		pthread_cond_broadcast(coder->finish_cond);
-		pthread_mutex_unlock(&coder->r_dongle->dongle_mutex);
-		pthread_mutex_unlock(&coder->l_dongle->dongle_mutex);
+		unlock_mutex(coder->r_dongle, coder);
+		unlock_mutex(coder->l_dongle, coder);
 		debugging(coder);
 		refactoring(coder);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 01:41:18 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/23 17:03:52 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/24 18:06:04 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,13 @@ void dongle_init(t_data *data)
 		dongles[i] = malloc(sizeof(t_dongles));
 		dongles[i]->queue[0] = NULL;
 		dongles[i]->queue[1] = NULL;
-		dongles[i]->dongle_cooldown = data->compiles_required;
-		pthread_mutex_init(&dongles[i++]->dongle_mutex, NULL);
+		dongles[i]->dongle_cooldown = data->dongle_cooldown;
+		dongles[i]->scheduler = data->scheduler;
+		dongles[i]->dongle_avaible = get_current_time();
+		dongles[i]->is_taken = false;
+		pthread_cond_init(&dongles[i]->dongle_cond, NULL);
+		pthread_mutex_init(&dongles[i]->dongle_mutex, NULL);
+		i++;
 	}
 	data->coders[0]->l_dongle = dongles[nb_coders - 1];
 	data->coders[0]->r_dongle = dongles[0];
