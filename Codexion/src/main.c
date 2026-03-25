@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 17:48:59 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/23 15:48:55 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/25 17:51:26 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,12 @@ void run_startup(t_data *data)
 	i = -1;
 	while (++i < data->number_of_coders)
 		pthread_create(&data->coders[i]->thread, NULL, &work, data->coders[i]);
+	pthread_create(&data->manager, NULL, &manager, data);
 	pthread_mutex_lock(&data->death_mutex);
-	while (data->all_alive && !project_finish(data))
+	while (!data->finish)
+	{
 		pthread_cond_wait(&data->finish_cond, &data->death_mutex);
+	}	
 	i = 0;
 	pthread_mutex_unlock(&data->death_mutex);
 	while (i < data->number_of_coders)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   work.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 00:06:37 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/24 18:56:44 by carl             ###   ########.fr       */
+/*   Updated: 2026/03/25 17:12:49 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,17 @@ void *work(void *arg)
 	{
 		if(coder->id % 2 == 0)
 		{
-		lock_mutex(coder->r_dongle, coder);
-		ft_message("has taken a dongle", coder);
-		lock_mutex(coder->l_dongle, coder);
-		ft_message("has taken a dongle", coder);
+			lock_mutex(coder->r_dongle, coder);
+			ft_message("has taken a dongle", coder);
+			lock_mutex(coder->l_dongle, coder);
+			ft_message("has taken a dongle", coder);
 		}
 		else
 		{
-		lock_mutex(coder->l_dongle, coder);
-		ft_message("has taken a dongle", coder);
-		lock_mutex(coder->r_dongle, coder);
-		ft_message("has taken a dongle", coder);
+			lock_mutex(coder->l_dongle, coder);
+			ft_message("has taken a dongle", coder);
+			lock_mutex(coder->r_dongle, coder);
+			ft_message("has taken a dongle", coder);
 		}
 		compiling(coder);
 		coder->actual_compiles++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   codexion.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 21:26:11 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/24 17:34:41 by carl             ###   ########.fr       */
+/*   Updated: 2026/03/25 15:44:12 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_data
 	int				dongle_cooldown;
 	char			*scheduler;
 	int				all_alive;
+	bool			finish;
 	
 	long long			time_to_burnout;
 	long long			time;
@@ -86,6 +87,8 @@ typedef struct s_data
 	pthread_cond_t	finish_cond;
 	pthread_mutex_t death_mutex;
 	pthread_mutex_t message;
+
+	pthread_t		manager;
 	
 	t_dongles		**dongles;
 	t_coder			**coders;
@@ -104,5 +107,6 @@ void 			*work(void *arg);
 int				project_finish(t_data *data);
 void			lock_mutex(t_dongles *dongle, t_coder *coder);
 void 			unlock_mutex(t_dongles *dongle, t_coder *coder);
+void 			*manager(void *arg);
 
 #endif

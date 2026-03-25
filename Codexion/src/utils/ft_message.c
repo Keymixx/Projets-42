@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 23:47:46 by carl              #+#    #+#             */
-/*   Updated: 2026/03/23 15:30:26 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/25 15:41:32 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void ft_message(char *str, t_coder *coder)
 	{
 		*coder->all_alive = 0;
 		printf("%lld %d burned out\n",current_time, coder->id);
-		pthread_cond_broadcast(coder->finish_cond);
 	}
     if(*coder->all_alive != 0)
         printf("%lld %d %s\n",current_time ,coder->id, str);

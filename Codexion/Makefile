@@ -11,7 +11,8 @@ SRC =  src/main.c \
 	   src/utils/ft_message.c \
 	   src/utils/ft_usleep.c \
 	   src/utils/project_finish.c \
-	   src/utils/queue.c
+	   src/utils/queue.c \
+	   src/routine/manager.c
 
 OBJ = $(SRC:.c=.o)
 
