@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   work.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 00:06:37 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/27 16:40:32 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/27 23:55:45 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/codexion.h"
 
+void cooldown_dongle(t_dongles *dongle);
 void compiling(t_coder *coder);
 void debugging(t_coder *coder);
 void refactoring(t_coder *coder);
@@ -27,27 +28,35 @@ void *work(void *arg)
 	{
 		if(coder->id % 2 == 0)
 		{
-			pthread_mutex_lock(&coder->r_dongle->dongle_mutex);
-			ft_message("has taken a dongle", coder);
-			pthread_mutex_lock(&coder->l_dongle->dongle_mutex);
-			ft_message("has taken a dongle", coder);
+			take_dongle(coder, coder->r_dongle);
+			take_dongle(coder, coder->l_dongle);
 		}
 		else
 		{
-			pthread_mutex_lock(&coder->l_dongle->dongle_mutex);
-			ft_message("has taken a dongle", coder);
-			pthread_mutex_lock(&coder->r_dongle->dongle_mutex);
-			ft_message("has taken a dongle", coder);
+			take_dongle(coder, coder->l_dongle);
+			take_dongle(coder, coder->r_dongle);
 		}
 		compiling(coder);
+		cooldown_dongle(coder->r_dongle);
+		cooldown_dongle(coder->l_dongle);
 		coder->actual_compiles++;
 		pthread_cond_broadcast(coder->finish_cond);
-		pthread_mutex_unlock(&coder->l_dongle->dongle_mutex);
-		pthread_mutex_unlock(&coder->r_dongle->dongle_mutex);
 		debugging(coder);
 		refactoring(coder);
 	}
 	return NULL;
+}
+
+void cooldown_dongle(t_dongles *dongle)
+{
+	long long timestamp_dongle;
+	
+	pthread_mutex_lock(&dongle->dongle_mutex);
+	timestamp_dongle = get_current_time() + dongle->dongle_cooldown;
+	dongle->dongle_avaible = timestamp_dongle;
+	dongle->is_taken = false;
+	pthread_cond_broadcast(&dongle->dongle_cond);
+	pthread_mutex_unlock(&dongle->dongle_mutex);
 }
 
 void compiling(t_coder *coder)

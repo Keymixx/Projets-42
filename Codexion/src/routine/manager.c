@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manager.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 15:32:33 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/27 15:43:25 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/28 00:28:28 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,17 @@ bool all_alive(t_data *data)
 	i = 0;
 	while(i < data->number_of_coders)
 	{
-		if(data->coders[i]->last_compile + data->time_to_burnout > get_current_time())
+		if(data->coders[i]->last_compile + data->time_to_burnout < get_current_time())
 		{
+			pthread_mutex_lock(&data->death_mutex);
+			if (data->coders[i]->all_alive != 0)
+				printf("%lld %d burned out\n",(get_current_time() - *data->coders[i]->time), data->coders[i]->id);
+			data->coders[i]->all_alive = 0;	
+			i = 0;
+			while(i < data->number_of_coders)
+				pthread_cond_broadcast(&data->dongles[i++]->dongle_cond);
+			pthread_cond_broadcast(&data->finish_cond);
+			pthread_mutex_unlock(&data->death_mutex);
 			return(false);
 		}
 		i++;
@@ -34,13 +43,14 @@ void *manager(void *arg)
 	t_data *data;
 	
 	data = (t_data *)arg;
-	usleep(500);
+	usleep(1000);
 	while (all_alive(data))
 	{
 		// printf("a = %lld ; b = %lld\n", data->coders[i]->last_compile + data->time_to_burnout, get_current_time());
 		usleep(500);
-		// printf("%d  %lld\n", all_alive(data), get_current_time());
+		// printf("%d  %lld\n", data->all_alive, get_current_time());
 	}
+	data->all_alive = false;
 	data->finish = true;
 	pthread_cond_broadcast(&data->finish_cond);
 	return NULL;

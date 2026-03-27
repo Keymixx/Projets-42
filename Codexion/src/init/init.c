@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 01:41:18 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/25 16:08:40 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/28 00:02:49 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void coders_init(t_data *data)
 		all_coders[i]->time = &data->time;
 		all_coders[i]->actual_compiles = 0;
 		all_coders[i]->data = data;
+		all_coders[i]->init = true;
 		i++;
 	}
 	all_coders[i] = NULL;

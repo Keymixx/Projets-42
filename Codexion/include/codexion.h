@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   codexion.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 21:26:11 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/27 18:38:21 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/28 00:01:45 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 typedef struct s_data t_data;
 typedef struct s_coder t_coder;
 
+
 typedef struct s_dongles
 {
 	pthread_mutex_t dongle_mutex;
@@ -55,6 +56,7 @@ typedef struct s_coder
 	int				time_to_refactor;
 	int				actual_compiles;
 	int				*all_alive;
+	bool			init;
 	
 	long long			last_compile;
 	long long			*time;
@@ -107,8 +109,7 @@ void 			ft_message(char *str, t_coder *coder);
 long long		get_current_time(void);
 void 			*work(void *arg);
 int				project_finish(t_data *data);
-void			lock_mutex(t_dongles *dongle, t_coder *coder);
-void 			unlock_mutex(t_dongles *dongle, t_coder *coder);
 void 			*manager(void *arg);
+void 			take_dongle(t_coder *coder, t_dongles *dongle);
 
 #endif

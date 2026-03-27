@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 17:48:59 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/25 17:51:26 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/28 00:33:24 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ void run_startup(t_data *data)
 	pthread_create(&data->manager, NULL, &manager, data);
 	pthread_mutex_lock(&data->death_mutex);
 	while (!data->finish)
-	{
 		pthread_cond_wait(&data->finish_cond, &data->death_mutex);
-	}	
 	i = 0;
 	pthread_mutex_unlock(&data->death_mutex);
 	while (i < data->number_of_coders)
