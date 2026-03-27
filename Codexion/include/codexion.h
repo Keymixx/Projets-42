@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 21:26:11 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/25 15:44:12 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/27 18:38:21 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ typedef struct s_coder
 	
 	long long			last_compile;
 	long long			*time;
+
+	long long			deadline;
 	
 	pthread_cond_t	*finish_cond;
 	pthread_mutex_t *death_mutex;

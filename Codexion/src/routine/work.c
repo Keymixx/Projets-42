@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 00:06:37 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/25 17:12:49 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/27 16:40:32 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,23 @@ void *work(void *arg)
 	{
 		if(coder->id % 2 == 0)
 		{
-			lock_mutex(coder->r_dongle, coder);
+			pthread_mutex_lock(&coder->r_dongle->dongle_mutex);
 			ft_message("has taken a dongle", coder);
-			lock_mutex(coder->l_dongle, coder);
+			pthread_mutex_lock(&coder->l_dongle->dongle_mutex);
 			ft_message("has taken a dongle", coder);
 		}
 		else
 		{
-			lock_mutex(coder->l_dongle, coder);
+			pthread_mutex_lock(&coder->l_dongle->dongle_mutex);
 			ft_message("has taken a dongle", coder);
-			lock_mutex(coder->r_dongle, coder);
+			pthread_mutex_lock(&coder->r_dongle->dongle_mutex);
 			ft_message("has taken a dongle", coder);
 		}
 		compiling(coder);
 		coder->actual_compiles++;
 		pthread_cond_broadcast(coder->finish_cond);
-		unlock_mutex(coder->r_dongle, coder);
-		unlock_mutex(coder->l_dongle, coder);
+		pthread_mutex_unlock(&coder->l_dongle->dongle_mutex);
+		pthread_mutex_unlock(&coder->r_dongle->dongle_mutex);
 		debugging(coder);
 		refactoring(coder);
 	}

@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 15:32:33 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/25 17:47:57 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/27 15:43:25 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void *manager(void *arg)
 		usleep(500);
 		// printf("%d  %lld\n", all_alive(data), get_current_time());
 	}
-	printf("BAC\n");
 	data->finish = true;
 	pthread_cond_broadcast(&data->finish_cond);
 	return NULL;

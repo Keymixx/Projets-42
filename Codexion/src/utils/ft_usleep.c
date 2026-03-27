@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 23:44:43 by carl              #+#    #+#             */
-/*   Updated: 2026/03/20 16:14:55 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/27 16:57:37 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,21 @@ long long	get_current_time(void)
 
 int	ft_usleep(long long milliseconds, t_coder *coder)
 {
-	(void)coder;
 	long long	start;
 	start = get_current_time();
-	while ((get_current_time() - start) < milliseconds)
+	while ((get_current_time() - start) < milliseconds && *coder->all_alive != 0)
 	{
+		usleep(500);
+		if((get_current_time() - coder->last_compile) > coder->time_to_burnout && *coder->all_alive != 0)
+		{
+			pthread_mutex_lock(coder->death_mutex);
+			if (*coder->all_alive != 0)
+				printf("%lld %d burned out\n",get_current_time() - *coder->time, coder->id);
+			*coder->all_alive = 0;
+			pthread_cond_broadcast(coder->finish_cond);
+			pthread_mutex_unlock(coder->death_mutex);
+			return(0);
+		}
 		usleep(500);
 	}
 	return (0);
