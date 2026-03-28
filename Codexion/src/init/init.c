@@ -6,7 +6,7 @@
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 01:41:18 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/28 00:02:49 by carl             ###   ########.fr       */
+/*   Updated: 2026/03/28 10:33:13 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void coders_init(t_data *data)
 		all_coders[i]->actual_compiles = 0;
 		all_coders[i]->data = data;
 		all_coders[i]->init = true;
+		all_coders[i]->last_compile = get_current_time();
 		i++;
 	}
 	all_coders[i] = NULL;

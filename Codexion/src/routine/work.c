@@ -6,7 +6,7 @@
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 00:06:37 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/27 23:55:45 by carl             ###   ########.fr       */
+/*   Updated: 2026/03/28 10:45:29 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void *work(void *arg)
 	
 	coder = (t_coder *)arg;
 	pthread_cond_broadcast(coder->finish_cond);
-	coder->last_compile = get_current_time();
 	while(*coder->all_alive && !project_finish(coder->data))
 	{
 		if(coder->id % 2 == 0)

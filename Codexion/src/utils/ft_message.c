@@ -6,7 +6,7 @@
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 23:47:46 by carl              #+#    #+#             */
-/*   Updated: 2026/03/28 00:32:30 by carl             ###   ########.fr       */
+/*   Updated: 2026/03/28 10:37:01 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,6 @@ void ft_message(char *str, t_coder *coder)
     
     current_time = get_current_time() - *coder->time;
 	pthread_mutex_lock(coder->death_mutex);
-    if((get_current_time() - coder->last_compile) > coder->time_to_burnout && *coder->all_alive != 0)
-	{
-		*coder->all_alive = 0;
-		printf("%lld %d burned out\n",current_time, coder->id);
-	}
     if(*coder->all_alive != 0)
         printf("%lld %d %s\n",current_time ,coder->id, str);
     pthread_mutex_unlock(coder->death_mutex);

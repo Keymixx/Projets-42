@@ -6,7 +6,7 @@
 /*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 15:32:33 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/28 00:28:28 by carl             ###   ########.fr       */
+/*   Updated: 2026/03/28 10:45:10 by carl             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool all_alive(t_data *data)
 			pthread_mutex_lock(&data->death_mutex);
 			if (data->coders[i]->all_alive != 0)
 				printf("%lld %d burned out\n",(get_current_time() - *data->coders[i]->time), data->coders[i]->id);
-			data->coders[i]->all_alive = 0;	
+			*data->coders[i]->all_alive = 0;	
 			i = 0;
 			while(i < data->number_of_coders)
 				pthread_cond_broadcast(&data->dongles[i++]->dongle_cond);
@@ -44,7 +44,7 @@ void *manager(void *arg)
 	
 	data = (t_data *)arg;
 	usleep(1000);
-	while (all_alive(data))
+	while (all_alive(data) && !project_finish(data))
 	{
 		// printf("a = %lld ; b = %lld\n", data->coders[i]->last_compile + data->time_to_burnout, get_current_time());
 		usleep(500);
