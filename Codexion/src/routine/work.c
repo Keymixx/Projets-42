@@ -3,37 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   work.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 00:06:37 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/28 10:45:29 by carl             ###   ########.fr       */
+/*   Updated: 2026/03/30 17:26:22 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/codexion.h"
 
-void cooldown_dongle(t_dongles *dongle);
-void compiling(t_coder *coder);
-void debugging(t_coder *coder);
-void refactoring(t_coder *coder);
+void	cooldown_dongle(t_dongles *dongle);
+void	compiling(t_coder *coder);
+void	debugging(t_coder *coder);
+void	refactoring(t_coder *coder);
 
-void *work(void *arg)
+void	*work(void *arg)
 {
-	t_coder *coder;
-	
+	t_coder	*coder;
+
 	coder = (t_coder *)arg;
 	pthread_cond_broadcast(coder->finish_cond);
-	while(*coder->all_alive && !project_finish(coder->data))
+	while (*coder->all_alive && !project_finish(coder->data))
 	{
-		if(coder->id % 2 == 0)
+		if (coder->id % 2 == 0)
 		{
-			take_dongle(coder, coder->r_dongle);
 			take_dongle(coder, coder->l_dongle);
+			take_dongle(coder, coder->r_dongle);
 		}
 		else
 		{
-			take_dongle(coder, coder->l_dongle);
 			take_dongle(coder, coder->r_dongle);
+			take_dongle(coder, coder->l_dongle);
 		}
 		compiling(coder);
 		cooldown_dongle(coder->r_dongle);
@@ -43,13 +43,13 @@ void *work(void *arg)
 		debugging(coder);
 		refactoring(coder);
 	}
-	return NULL;
+	return (NULL);
 }
 
-void cooldown_dongle(t_dongles *dongle)
+void	cooldown_dongle(t_dongles *dongle)
 {
-	long long timestamp_dongle;
-	
+	long long	timestamp_dongle;
+
 	pthread_mutex_lock(&dongle->dongle_mutex);
 	timestamp_dongle = get_current_time() + dongle->dongle_cooldown;
 	dongle->dongle_avaible = timestamp_dongle;
@@ -58,20 +58,20 @@ void cooldown_dongle(t_dongles *dongle)
 	pthread_mutex_unlock(&dongle->dongle_mutex);
 }
 
-void compiling(t_coder *coder)
+void	compiling(t_coder *coder)
 {
 	ft_message("is compiling", coder);
 	coder->last_compile = get_current_time();
 	ft_usleep(coder->time_to_compile, coder);
 }
 
-void debugging(t_coder *coder)
+void	debugging(t_coder *coder)
 {
 	ft_message("is debugging", coder);
 	ft_usleep(coder->time_to_debug, coder);
 }
 
-void refactoring(t_coder *coder)
+void	refactoring(t_coder *coder)
 {
 	ft_message("is refactoring", coder);
 	ft_usleep(coder->time_to_refactor, coder);

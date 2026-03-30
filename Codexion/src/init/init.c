@@ -3,21 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 01:41:18 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/28 10:33:13 by carl             ###   ########.fr       */
+/*   Updated: 2026/03/30 16:13:07 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/codexion.h"
 
-void dongle_init(t_data *data)
+void	init_startup(t_data *data)
 {
-	int				i;
-	int 			nb_coders;
-	t_dongles 		**dongles;
-	
+	pthread_cond_init(&data->finish_cond, NULL);
+	pthread_mutex_init(&data->death_mutex, NULL);
+	data->all_alive = 1;
+	coders_init(data);
+	dongle_init(data);
+	data->time = get_current_time();
+}
+
+void	dongle_assignment(t_data *data, t_dongles **dongles)
+{
+	int	i;
+
+	i = 0;
+	data->coders[0]->l_dongle = dongles[data->number_of_coders - 1];
+	data->coders[0]->r_dongle = dongles[0];
+	i = 1;
+	while (i < data->number_of_coders)
+	{
+		data->coders[i]->l_dongle = dongles[i - 1];
+		data->coders[i]->r_dongle = dongles[i];
+		i++;
+	}
+	data->dongles = dongles;
+}
+
+void	dongle_init(t_data *data)
+{
+	int			i;
+	int			nb_coders;
+	t_dongles	**dongles;
+
 	nb_coders = data->number_of_coders;
 	dongles = malloc(sizeof(t_dongles *) * nb_coders);
 	i = 0;
@@ -34,27 +61,17 @@ void dongle_init(t_data *data)
 		pthread_mutex_init(&dongles[i]->dongle_mutex, NULL);
 		i++;
 	}
-	data->coders[0]->l_dongle = dongles[nb_coders - 1];
-	data->coders[0]->r_dongle = dongles[0];
-	i = 1;
-	while(i < nb_coders)
-	{
-		data->coders[i]->l_dongle = dongles[i - 1];
-		data->coders[i]->r_dongle = dongles[i];
-		i++;
-	}
-	data->dongles = dongles;
+	dongle_assignment(data, dongles);
 }
 
-
-void coders_init(t_data *data)
+void	coders_init(t_data *data)
 {
-	int	i;
-	t_coder **all_coders;
+	int		i;
+	t_coder	**all_coders;
 
 	i = 0;
 	all_coders = malloc(sizeof(t_coder *) * (data->number_of_coders + 1));
-	while(i < data->number_of_coders)
+	while (i < data->number_of_coders)
 	{
 		all_coders[i] = malloc(sizeof(t_coder));
 		all_coders[i]->id = i + 1;
@@ -70,8 +87,7 @@ void coders_init(t_data *data)
 		all_coders[i]->actual_compiles = 0;
 		all_coders[i]->data = data;
 		all_coders[i]->init = true;
-		all_coders[i]->last_compile = get_current_time();
-		i++;
+		all_coders[i++]->last_compile = get_current_time();
 	}
 	all_coders[i] = NULL;
 	data->coders = all_coders;

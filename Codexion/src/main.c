@@ -3,26 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: carl <carl@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 17:48:59 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/28 10:28:34 by carl             ###   ########.fr       */
+/*   Updated: 2026/03/30 16:19:13 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/codexion.h"
 
-
-void run_startup(t_data *data)
+void	run_startup(t_data *data)
 {
 	int	i;
 
-	pthread_cond_init(&data->finish_cond, NULL);
-	pthread_mutex_init(&data->death_mutex, NULL);
-	data->all_alive = 1;
-	coders_init(data);
-	dongle_init(data);
-	data->time = get_current_time();
+	init_startup(data);
 	i = -1;
 	while (++i < data->number_of_coders)
 		pthread_create(&data->coders[i]->thread, NULL, &work, data->coders[i]);
@@ -43,7 +37,7 @@ void run_startup(t_data *data)
 	pthread_cond_destroy(&data->finish_cond);
 }
 
-void ft_free(t_data *data)
+void	ft_free(t_data *data)
 {
 	int	i;
 
@@ -58,15 +52,17 @@ void ft_free(t_data *data)
 	free(data->dongles);
 }
 
-int	main(int argc, char	*argv[])
+int	main(int argc, char *argv[])
 {
-	t_data			data;
-	
+	t_data	data;
+
 	if (!args_checking(argc, argv))
 		return (0);
 	data = get_data(argv);
-	if (data.number_of_coders > 1)
+	if (data.number_of_coders >= 1)
+	{
 		run_startup(&data);
-	ft_free(&data);
-	return(0);
+		ft_free(&data);
+	}
+	return (0);
 }

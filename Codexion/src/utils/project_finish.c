@@ -6,7 +6,7 @@
 /*   By: caaubert <caaubert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/20 16:36:56 by caaubert          #+#    #+#             */
-/*   Updated: 2026/03/25 16:57:41 by caaubert         ###   ########.fr       */
+/*   Updated: 2026/03/30 16:51:02 by caaubert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 int	project_finish(t_data *data)
 {
 	int	i;
-	int nb_coders;
+	int	nb_coders;
 
 	i = 0;
 	nb_coders = data->number_of_coders;
-	while(i < nb_coders)
+	while (i < nb_coders)
 	{
 		if (data->coders[i]->actual_compiles < data->compiles_required)
 		{
-			return(0);
+			return (0);
 		}
 		i++;
 	}
-	return(1);
+	return (1);
 }
