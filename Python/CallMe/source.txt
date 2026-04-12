@@ -1,3 +1,5 @@
 https://www.promptingguide.ai/applications/function_calling
 
 https://medium.com/@jamestang/llm-function-calling-explained-a-deep-dive-into-the-request-and-response-payloads-894800fcad75
+
+https://www.youtube.com/watch?v=ujkc11DoMgk
